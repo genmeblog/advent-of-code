@@ -32,12 +32,7 @@
 (defn ->number [in] (try (if (= \0 (first in)) ;; avoid octal number
                            (Long/parseLong in)
                            (Long/decode in)) (catch Exception _)))
-
 (defn between? [v1 v2 in] (when-let [n (->number in)] (<= v1 n v2)))
-(def eyecolor #{"amb" "blu" "brn" "gry" "grn" "hzl" "oth"})
-(defn pid [in] (and (= 9 (count in)) (->number in)))
-(defn hcl [in] (and (= \# (first in)) (= 7 (count in)) (->number in)))
-
 (defn height [in]
   (let [[w m] (rest (re-find #"(.*)(..)$" in))]
     (or (and (= m "cm") (between? 150 193 w))
@@ -47,9 +42,9 @@
                  :iyr (partial between? 2010 2020)
                  :eyr (partial between? 2020 2030)
                  :hgt height
-                 :hcl hcl
-                 :ecl eyecolor
-                 :pid pid
+                 :hcl #(and (re-find #"^#[0-9a-f]{6}$" %) (->number %))
+                 :ecl #{"amb" "blu" "brn" "gry" "grn" "hzl" "oth"}
+                 :pid #(and (re-find #"^\d{9}$" %) (->number %))
                  :cid (constantly true)})
 
 (defn fields-valid? [passport] (reduce-kv (fn [p k v] (and p ((validators k) v))) true passport))
