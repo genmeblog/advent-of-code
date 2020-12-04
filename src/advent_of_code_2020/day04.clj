@@ -29,6 +29,8 @@
 (def part-1 (time (count passports-with-required)))
 ;; 196
 
+;;
+
 (defn ->number [in] (try (if (= \0 (first in)) ;; avoid octal number
                            (Long/parseLong in)
                            (Long/decode in)) (catch Exception _)))
