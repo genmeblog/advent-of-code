@@ -36,7 +36,7 @@
 (defn between? [v1 v2 in] (when-let [n (->number in)] (<= v1 n v2)))
 (def eyecolor #{"amb" "blu" "brn" "gry" "grn" "hzl" "oth"})
 (defn pid [in] (and (= 9 (count in)) (->number in)))
-(defn hcl [in] (and (= \# (first in)) (->number in)))
+(defn hcl [in] (and (= \# (first in)) (= 7 (count in)) (->number in)))
 
 (defn height [in]
   (let [[w m] (rest (re-find #"(.*)(..)$" in))]
