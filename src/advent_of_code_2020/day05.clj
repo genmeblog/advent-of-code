@@ -4,9 +4,7 @@
 
 (defn ->number
   [s]
-  (-> s
-      (str/replace #"[FL]" "0")
-      (str/replace #"[BR]" "1")
+  (-> (str/escape s {\F 0 \L 0 \B 1 \R 1})
       (Integer/parseInt 2)))
 
 (def data (sort (map ->number (read-data 5))))

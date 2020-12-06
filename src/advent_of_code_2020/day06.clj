@@ -7,8 +7,7 @@
 (defn total-yes-answers
   [data]
   (->> data
-       (map (comp set (partial str/join "")))
-       (map count)
+       (map (comp count set (partial str/join "")))
        (reduce +)))
 
 (def part-1 (total-yes-answers data))
