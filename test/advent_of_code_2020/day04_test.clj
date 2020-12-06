@@ -1,9 +1,9 @@
 (ns advent-of-code-2020.day04-test
   (:require [advent-of-code-2020.day04 :as sut]
-            [clojure.test :as t]
-            [clojure.string :as str]))
+            [advent-of-code-2020.common :refer [str-as-blocks]]
+            [clojure.test :as t]))
 
-(def data (sut/parser (str/split-lines "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
+(def data (sut/parse-passports (str-as-blocks "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
 byr:1937 iyr:2017 cid:147 hgt:183cm
 
 iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884
@@ -20,10 +20,10 @@ iyr:2011 ecl:brn hgt:59in")))
 (defn passport-valid? [rec] (= 7 (count (select-keys rec sut/required-fields))))
 
 (t/deftest passport-validity
-  (t/is (not (passport-valid? (first data))))
-  (t/is (passport-valid? (second data)))
-  (t/is (not (passport-valid? (nth data 2))))
-  (t/is (passport-valid? (nth data 3))))
+  (t/is (passport-valid? (first data)))
+  (t/is (not (passport-valid? (second data))))
+  (t/is (passport-valid? (nth data 2)))
+  (t/is (not (passport-valid? (nth data 3)))))
 
 (t/deftest passport-validity-count
   (t/is (= 2 (count (sut/with-required data)))))
@@ -51,7 +51,7 @@ iyr:2011 ecl:brn hgt:59in")))
   (and (passport-valid? passport)
        (sut/fields-valid? passport)))
 
-(def data-valid (sut/parser (str/split-lines "pid:087499704 hgt:74in ecl:grn iyr:2012 eyr:2030 byr:1980
+(def data-valid (sut/parse-passports (str-as-blocks "pid:087499704 hgt:74in ecl:grn iyr:2012 eyr:2030 byr:1980
 hcl:#623a2f
 
 eyr:2029 ecl:blu cid:129 byr:1989
@@ -64,7 +64,7 @@ eyr:2022
 
 iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719")))
 
-(def data-invalid (sut/parser (str/split-lines "eyr:1972 cid:100
+(def data-invalid (sut/parse-passports (str-as-blocks "eyr:1972 cid:100
 hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926
 
 iyr:2019

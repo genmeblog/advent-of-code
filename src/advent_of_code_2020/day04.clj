@@ -1,22 +1,20 @@
 (ns advent-of-code-2020.day04
-  (:require [advent-of-code-2020.common :refer [read-data]]
+  (:require [advent-of-code-2020.common :refer [read-data-as-blocks]]
             [clojure.string :as str]))
 
 (defn parse-line
   [line]
-  (mapcat #(let [[k v] (str/split % #":")]
-             [(keyword k) v]) (str/split line #" ")))
+  (map #(let [[k v] (str/split % #":")]
+          [(keyword k) v]) (str/split line #" ")))
 
-(defn parser
-  [lines]
-  (reduce (fn [[h & r :as maps] line]
-            (if (seq line)
-              (conj r (apply assoc h (parse-line line)))
-              (conj maps {}))) '({}) lines))
+(defn parse-passports
+  [blocks]
+  (map (fn [block]
+         (into {} (mapcat parse-line block))) blocks))
+
+(def data (parse-passports (read-data-as-blocks 4)))
 
 (def required-fields [:byr :iyr :eyr :hgt :hcl :ecl :pid])
-
-(def data (parser (read-data 4)))
 
 (defn with-required
   [data]
