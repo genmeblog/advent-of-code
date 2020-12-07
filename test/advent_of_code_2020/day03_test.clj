@@ -25,3 +25,7 @@
 
 (t/deftest multiply
   (t/is (= 336 (sut/multiply-trees data sut/slopes))))
+
+(t/deftest sut
+  (t/is (= 151 sut/part-1))
+  (t/is (= 7540141059 sut/part-2)))

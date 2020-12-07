@@ -19,3 +19,7 @@
 
 (t/deftest count-valid2
   (t/is (= 1 (sut/how-many-valid sut/valid2? data))))
+
+(t/deftest sut
+  (t/is (= 396 sut/part-1))
+  (t/is (= 428 sut/part-2)))

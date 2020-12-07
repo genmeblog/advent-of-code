@@ -24,3 +24,7 @@ b"))
 
 (t/deftest total-common-yes-answers
   (t/is (= 6 (sut/total-common-yes-answers data))))
+
+(t/deftest sut
+  (t/is (= 6530 sut/part-1))
+  (t/is (= 3323 sut/part-2)))

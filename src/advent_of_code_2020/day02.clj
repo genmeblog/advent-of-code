@@ -19,6 +19,7 @@
   (<= mn (get (frequencies password) letter 0) mx))
 
 (def part-1 (time (how-many-valid valid1? data)))
+;; => 396
 
 ;;
 
@@ -32,4 +33,4 @@
     (xor (= l1 letter) (= l2 letter))))
 
 (def part-2 (time (how-many-valid valid2? data)))
-
+;; => 428

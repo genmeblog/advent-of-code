@@ -8,3 +8,7 @@
     "BFFFBBFRRR" 567
     "FFFBBBFRRR" 119
     "BBFFBBFRLL" 820))
+
+(t/deftest sut
+  (t/is (= 855 sut/part-1))
+  (t/is (= 552 sut/part-2)))

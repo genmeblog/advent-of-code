@@ -81,3 +81,7 @@ pid:3556412378 byr:2007")))
 (t/deftest passport-field-validity
   (t/is (every? identity (map valid-passport-and-fields? data-valid)))
   (t/is (every? (complement identity) (map valid-passport-and-fields? data-invalid))))
+
+(t/deftest sut
+  (t/is (= 196 sut/part-1))
+  (t/is (= 114 sut/part-2)))

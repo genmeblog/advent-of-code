@@ -23,13 +23,9 @@
 (def process-expense-report-2 (make-reporter 2))
 
 (def part-1 (time (process-expense-report-2 data)))
-
-part-1
 ;; => 866436
 
 (def process-expense-report-3 (make-reporter 3))
 
 (def part-2 (time (process-expense-report-3 data)))
-
-part-2
 ;; => 276650720
