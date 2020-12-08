@@ -19,7 +19,7 @@
      :else (let [[opcode arg] (code pc)
                  nvisited (conj visited pc)]
              (condp = opcode
-               "acc" (recur code (assoc state :acc (+ acc arg) :pc (inc pc) :visited nvisited))
+               "acc" (recur code {:acc (+ acc arg) :pc (inc pc) :visited nvisited})
                "jmp" (recur code (assoc state :pc (+ pc arg) :visited nvisited))
                (recur code (assoc state :pc (inc pc) :visited nvisited)))))))
 
@@ -32,9 +32,8 @@
 
 (defn simulate
   [code]
-  (->> (count code)
-       (range)
-       (map (fn [id] (execute (update-in code [id 0] opcode-exchange))))
+  (->> (range (count code))
+       (map #(execute (update-in code [% 0] opcode-exchange)))
        (drop-while (complement (comp #{:terminated} first)))
        (first)))
 
