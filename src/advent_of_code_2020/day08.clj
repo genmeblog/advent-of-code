@@ -10,21 +10,21 @@
 (def data (mapv parse (read-data 8)))
 
 (defn execute
-  ([code] (execute code {:acc 0 :pc 0 :visited #{}}))
-  ([code {:keys [acc pc visited] :as state}]
+  ([code] (execute code 0 0 #{}))
+  ([code acc pc visited]
    (cond
-     (visited pc) [:loop acc]
-     (= pc (count code)) [:terminated acc]
-     (> pc (count code)) [:bug acc]
+     (visited pc) {:loop acc}
+     (= pc (count code)) {:terminated acc}
+     (> pc (count code)) {:bug acc}
      :else (let [[opcode arg] (code pc)
                  nvisited (conj visited pc)]
              (condp = opcode
-               "acc" (recur code {:acc (+ acc arg) :pc (inc pc) :visited nvisited})
-               "jmp" (recur code (assoc state :pc (+ pc arg) :visited nvisited))
-               (recur code (assoc state :pc (inc pc) :visited nvisited)))))))
+               "acc" (recur code (+ acc arg) (inc pc) nvisited)
+               "jmp" (recur code acc (+ pc arg) nvisited)
+               (recur code acc (inc pc) nvisited))))))
 
 (def part-1 (execute data))
-;; => [:loop 1548]
+;; => {:loop 1548}
 
 (def opcode-exchange {"jmp" "nop"
                       "nop" "jmp"
@@ -34,8 +34,8 @@
   [code]
   (->> (range (count code))
        (map #(execute (update-in code [% 0] opcode-exchange)))
-       (drop-while (complement (comp #{:terminated} first)))
+       (drop-while (complement :terminated))
        (first)))
 
 (def part-2 (simulate data))
-;; => [:terminated 1375]
+;; => {:terminated 1375}

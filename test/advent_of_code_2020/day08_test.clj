@@ -15,11 +15,11 @@ acc +6")
                (mapv sut/parse)))
 
 (t/deftest loop-test
-  (t/is (= [:loop 5] (sut/execute data))))
+  (t/is (= {:loop 5} (sut/execute data))))
 
 (t/deftest simulation-test
-  (t/is (= [:terminated 8] (sut/simulate data))))
+  (t/is (= {:terminated 8} (sut/simulate data))))
 
 (t/deftest sut
-  (t/is (= [:loop 1548] sut/part-1))
-  (t/is (= [:terminated 1375] sut/part-2)))
+  (t/is (= {:loop 1548} sut/part-1))
+  (t/is (= {:terminated 1375} sut/part-2)))
