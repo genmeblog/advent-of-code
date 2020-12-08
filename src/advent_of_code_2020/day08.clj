@@ -26,9 +26,7 @@
 (def part-1 (execute data))
 ;; => {:loop 1548}
 
-(def opcode-exchange {"jmp" "nop"
-                      "nop" "jmp"
-                      "acc" "acc"})
+(def opcode-exchange {"jmp" "nop" "nop" "jmp" "acc" "acc"})
 
 (defn simulate
   [code]
