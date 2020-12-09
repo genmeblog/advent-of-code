@@ -32,7 +32,7 @@
   [code]
   (->> (range (count code))
        (map #(execute (update-in code [% 0] opcode-exchange)))
-       (drop-while (complement :terminated))
+       (filter :terminated)
        (first)))
 
 (def part-2 (simulate data))
