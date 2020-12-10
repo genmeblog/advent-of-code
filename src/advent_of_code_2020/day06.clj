@@ -1,8 +1,8 @@
 (ns advent-of-code-2020.day06
-  (:require [advent-of-code-2020.common :refer [read-data-as-blocks]]
+  (:require [common :refer [read-data-as-blocks]]
             [clojure.string :as str]))
 
-(def data (read-data-as-blocks 6))
+(def data (read-data-as-blocks 2020 6))
 
 (defn total-yes-answers
   [data]

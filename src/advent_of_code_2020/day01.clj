@@ -1,12 +1,12 @@
 (ns advent-of-code-2020.day01
-  (:require [advent-of-code-2020.common :refer [read-data]]
+  (:require [common :refer [read-data]]
             [fastmath.core :as m]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 (m/use-primitive-operators)
 
-(def data (->> (read-data 1)
+(def data (->> (read-data 2020 1)
                (map read-string)
                (sort)))
 

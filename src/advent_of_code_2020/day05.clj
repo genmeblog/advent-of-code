@@ -1,5 +1,5 @@
 (ns advent-of-code-2020.day05
-  (:require [advent-of-code-2020.common :refer [read-data]]
+  (:require [common :refer [read-data]]
             [clojure.string :as str]))
 
 (defn ->number
@@ -7,7 +7,7 @@
   (-> (str/escape s {\F 0 \L 0 \B 1 \R 1})
       (Integer/parseInt 2)))
 
-(def data (sort (map ->number (read-data 5))))
+(def data (sort (map ->number (read-data 2020 5))))
 
 (def part-1 (last data))
 ;; 855

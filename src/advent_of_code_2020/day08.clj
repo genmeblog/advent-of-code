@@ -1,5 +1,5 @@
 (ns advent-of-code-2020.day08
-  (:require [advent-of-code-2020.common :refer [read-data]]
+  (:require [common :refer [read-data]]
             [clojure.string :as str]))
 
 (defn parse
@@ -7,7 +7,7 @@
   (let [[opcode data] (str/split line #" ")]
     [opcode (read-string data)]))
 
-(def data (mapv parse (read-data 8)))
+(def data (mapv parse (read-data 2020 8)))
 
 (defn execute
   ([code] (execute code 0 0 #{}))

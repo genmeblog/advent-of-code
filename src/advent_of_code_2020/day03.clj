@@ -1,7 +1,7 @@
 (ns advent-of-code-2020.day03
-  (:require [advent-of-code-2020.common :refer [read-data]]))
+  (:require [common :refer [read-data]]))
 
-(def data (read-data 3))
+(def data (read-data 2020 3))
 
 (defn tree-count
   [data [right down]]
