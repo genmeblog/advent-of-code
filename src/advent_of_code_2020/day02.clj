@@ -1,5 +1,5 @@
 (ns advent-of-code-2020.day02
-  (:require [advent-of-code-2020.common :refer [read-data]]))
+  (:require [common :refer [read-data]]))
 
 (def regex #"(\d+)-(\d+) (\w+): (\w+)")
 
@@ -8,7 +8,7 @@
   (let [[mn mx letter password] (rest (re-matches regex in))]
     [(Integer. mn) (Integer. mx) (first letter) password]))
 
-(def data (map parse (read-data 2)))
+(def data (map parse (read-data 2020 2)))
 
 (defn how-many-valid
   [validator strs]

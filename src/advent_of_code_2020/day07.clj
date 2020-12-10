@@ -1,5 +1,5 @@
 (ns advent-of-code-2020.day07
-  (:require [advent-of-code-2020.common :refer [read-data]]))
+  (:require [common :refer [read-data]]))
 
 (defn parse
   [line]
@@ -10,7 +10,7 @@
          (map (fn [[cnt nm]]
                 [n nm (Integer/parseInt cnt)])))))
 
-(def data (mapcat parse (read-data 7)))
+(def data (mapcat parse (read-data 2020 7)))
 
 (defn traverse
   ([bags-map nm] (traverse bags-map [#{} #{}] nm))

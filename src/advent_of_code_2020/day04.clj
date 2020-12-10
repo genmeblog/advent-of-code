@@ -1,5 +1,5 @@
 (ns advent-of-code-2020.day04
-  (:require [advent-of-code-2020.common :refer [read-data-as-blocks]]
+  (:require [common :refer [read-data-as-blocks]]
             [clojure.string :as str]))
 
 (defn parse-line
@@ -12,7 +12,7 @@
   (map (fn [block]
          (into {} (mapcat parse-line block))) blocks))
 
-(def data (parse-passports (read-data-as-blocks 4)))
+(def data (parse-passports (read-data-as-blocks 2020 4)))
 
 (def required-fields [:byr :iyr :eyr :hgt :hcl :ecl :pid])
 

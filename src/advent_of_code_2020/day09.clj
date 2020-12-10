@@ -1,7 +1,7 @@
 (ns advent-of-code-2020.day09
-  (:require [advent-of-code-2020.common :refer [read-data]]))
+  (:require [common :refer [read-data]]))
 
-(def data (map read-string (read-data 9)))
+(def data (map read-string (read-data 2020 9)))
 
 (defn not-in-sums?
   [part]

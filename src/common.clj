@@ -1,10 +1,10 @@
-(ns advent-of-code-2020.common
+(ns common
   (:require [clojure.java.io :as io]
             [clojure.string :as str]))
 
 (defn read-data
-  [day]
-  (-> (io/resource (format "day%02d.txt" day))
+  [year day]
+  (-> (io/resource (format (str "advent_of_code_" year "/day%02d.txt") day))
       (io/reader)
       (line-seq)))
 
@@ -14,8 +14,8 @@
        (map #(str/split % #"\n"))))
 
 (defn read-data-as-blocks
-  [day]
-  (-> (io/resource (format "day%02d.txt" day))
+  [year day]
+  (-> (io/resource (format (str "advent_of_code_" year "/day%02d.txt") day))
       (slurp)
       (str-as-blocks)))
 
