@@ -1,33 +1,33 @@
 (ns advent-of-code-2015.day05-test
-  (:require [advent-of-code-2015.day05 :refer :all]
-            [clojure.test :refer :all]))
+  (:require [advent-of-code-2015.day05 :as sut]
+            [clojure.test :as t]))
 
-(deftest preds
-  (is (three-vowels? "aei"))
-  (is (three-vowels? "xazegov"))
-  (is (three-vowels? "aeiouaeiouaeiou"))
-  (is (double-letter? (partition 2 1 "abcdde")))
-  (is (double-letter? (partition 2 1 "aabbccdd")))
-  (is (double-doubles? "xyxy"))
-  (is (double-doubles? "aabcdefgaa"))
-  (is (not (double-doubles? "aaa")))
-  (is (letter-between? "xyx"))
-  (is (letter-between? "abcdefeghi"))
-  (is (letter-between? "aaa")))
+(t/deftest preds
+  (t/is (sut/three-vowels? "aei"))
+  (t/is (sut/three-vowels? "xazegov"))
+  (t/is (sut/three-vowels? "aeiouaeiouaeiou"))
+  (t/is (sut/double-letter? (partition 2 1 "abcdde")))
+  (t/is (sut/double-letter? (partition 2 1 "aabbccdd")))
+  (t/is (sut/double-doubles? "xyxy"))
+  (t/is (sut/double-doubles? "aabcdefgaa"))
+  (t/is (not (sut/double-doubles? "aaa")))
+  (t/is (sut/letter-between? "xyx"))
+  (t/is (sut/letter-between? "abcdefeghi"))
+  (t/is (sut/letter-between? "aaa")))
 
-(deftest nicenests
-  (is (nice? "ugknbfddgicrmopn"))
-  (is (nice? "aaa"))
-  (is (not (nice? "jchzalrnumimnmhp")))
-  (is (not (nice? "haegwjzuvuyypxyu")))
-  (is (not (nice? "dvszwmarrgswjxmb"))))
+(t/deftest nicenests
+  (t/is (sut/nice? "ugknbfddgicrmopn"))
+  (t/is (sut/nice? "aaa"))
+  (t/is (not (sut/nice? "jchzalrnumimnmhp")))
+  (t/is (not (sut/nice? "haegwjzuvuyypxyu")))
+  (t/is (not (sut/nice? "dvszwmarrgswjxmb"))))
 
-(deftest better-nicenests
-  (is (better-nice? "qjhvhtzxzqqjkmpb"))
-  (is (better-nice? "xxyxx"))
-  (is (not (better-nice? "uurcxstgmygtbstg")))
-  (is (not (better-nice? "ieodomkazucvgmuy"))))
+(t/deftest better-nicenests
+  (t/is (sut/better-nice? "qjhvhtzxzqqjkmpb"))
+  (t/is (sut/better-nice? "xxyxx"))
+  (t/is (not (sut/better-nice? "uurcxstgmygtbstg")))
+  (t/is (not (sut/better-nice? "ieodomkazucvgmuy"))))
 
-(deftest results
-  (is (= 238 part-1))
-  (is (= 69 part-2)))
+(t/deftest sut
+  (t/is (= 238 sut/part-1))
+  (t/is (= 69 sut/part-2)))

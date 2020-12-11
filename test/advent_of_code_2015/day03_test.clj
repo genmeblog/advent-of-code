@@ -1,17 +1,17 @@
 (ns advent-of-code-2015.day03-test
-  (:require [advent-of-code-2015.day03 :refer :all]
-            [clojure.test :refer :all]))
+  (:require [advent-of-code-2015.day03 :as sut]
+            [clojure.test :as t]))
 
-(deftest visited-with-present-test
-  (is (= 2 (visited-with-present ">")))
-  (is (= 4 (visited-with-present "^>v<")))
-  (is (= 2 (visited-with-present "^v^v^v^v^v"))))
+(t/deftest visited-with-present-test
+  (t/is (= 2 (sut/visited-with-present ">")))
+  (t/is (= 4 (sut/visited-with-present "^>v<")))
+  (t/is (= 2 (sut/visited-with-present "^v^v^v^v^v"))))
 
-(deftest visited-with-robo-test
-  (is (= 3 (visited-with-robo "^v")))
-  (is (= 3 (visited-with-robo "^>v<")))
-  (is (= 11 (visited-with-robo "^v^v^v^v^v"))))
+(t/deftest visited-with-robo-test
+  (t/is (= 3 (sut/visited-with-robo "^v")))
+  (t/is (= 3 (sut/visited-with-robo "^>v<")))
+  (t/is (= 11 (sut/visited-with-robo "^v^v^v^v^v"))))
 
-(deftest results
-  (is (= 2572 part-1))
-  (is (= 2631 part-2)))
+(t/deftest sut
+  (t/is (= 2572 sut/part-1))
+  (t/is (= 2631 sut/part-2)))
