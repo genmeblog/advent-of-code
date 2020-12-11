@@ -72,11 +72,13 @@
   (->> pos
        (iterate (fn [curr-pos] (v/add curr-pos direction)))
        (next)
-       (reduce (fn [curr [row col :as curr-pos]]
-                 (cond
-                   (outside? data row col) (reduced curr)
-                   (= \L (at data row col)) (reduced curr-pos)
-                   :else curr)) nil)))
+       (reduce (fn [curr curr-pos]
+                 (let [row (curr-pos 0)
+                       col (curr-pos 1)]
+                   (cond
+                     (outside? data row col) (reduced curr)
+                     (= \L (at data row col)) (reduced curr-pos)
+                     :else curr))) nil)))
 
 (def directions
   (map (partial apply v/vec2) [[-1 -1] [-1 0] [-1 1] [0 1] [0 -1] [1 -1] [1 0] [1 1]]))
