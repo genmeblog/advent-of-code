@@ -1,24 +1,24 @@
 (ns advent-of-code-2015.day01-test
-  (:require [advent-of-code-2015.day01 :refer :all]
-            [clojure.test :refer :all]))
+  (:require [advent-of-code-2015.day01 :as sut]
+            [clojure.test :as t]))
 
-(defn process-data [d] (reduce + (map convert d)))
+(defn process-data [d] (reduce + (map sut/convert d)))
 
-(deftest part-1-tests
-  (is (zero? (process-data "(())")))
-  (is (zero? (process-data "))((")))
-  (is (= 3 (process-data "(((")))
-  (is (= 3 (process-data "(()(()(")))
-  (is (= 3 (process-data "))(((((")))
-  (is (= -1 (process-data "())")))
-  (is (= -1 (process-data "))(")))
-  (is (= -3 (process-data ")))")))
-  (is (= -3 (process-data ")())())"))))
+(t/deftest part-1-tests
+  (t/is (zero? (process-data "(())")))
+  (t/is (zero? (process-data "))((")))
+  (t/is (= 3 (process-data "(((")))
+  (t/is (= 3 (process-data "(()(()(")))
+  (t/is (= 3 (process-data "))(((((")))
+  (t/is (= -1 (process-data "())")))
+  (t/is (= -1 (process-data "))(")))
+  (t/is (= -3 (process-data ")))")))
+  (t/is (= -3 (process-data ")())())"))))
 
-(deftest part-2-tests
-  (is (= 1 (find-step (map convert ")"))))
-  (is (= 5 (find-step (map convert "()())")))))
+(t/deftest part-2-tests
+  (t/is (= 1 (sut/find-step (map sut/convert ")"))))
+  (t/is (= 5 (sut/find-step (map sut/convert "()())")))))
 
-(deftest results
-  (is (= 138 part-1))
-  (is (= 1771 part-2)))
+(t/deftest sut
+  (t/is (= 138 sut/part-1))
+  (t/is (= 1771 sut/part-2)))

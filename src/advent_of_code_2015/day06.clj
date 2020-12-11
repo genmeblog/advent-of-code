@@ -1,7 +1,6 @@
 (ns advent-of-code-2015.day06
-  (:require [fastmath.core :as m]
-            [clojure.string :as s]
-            [clojure.java.io :as io]))
+  (:require [fastmath.core :as m]            
+            [common :refer [read-data]]))
 
 (set! *unchecked-math* :warn-on-boxed)
 (set! *warn-on-reflection* true)
@@ -13,45 +12,33 @@
 (defn turn-off [^long off] (aset ^longs buffer off 0))
 
 (defn perform-operation
-  [op [sx sy] [ex ey]]
-  (doseq [^long y (range sy (inc ^long ey))
+  [op [^long sx ^long sy ^long ex ^long ey]]
+  (doseq [^long y (range sy (inc ey))
           :let [yy (* y 1000)]]
-    (doseq [^long x (range sx (inc ^long ex))]
+    (doseq [^long x (range sx (inc ex))]
       (op (+ x yy)))))
 
-(defn clean [] (perform-operation turn-off [0 0] [999 999]))
-
-(defn parse-numbers
-  [n]
-  (let [[^String x ^String y] (s/split n #",")]
-    [(Long/valueOf x) (Long/valueOf y)]))
+(defn clean [] (perform-operation turn-off [0 0 999 999]))
 
 (defn parse-command
-  [ft fon foff cmd]
-  (let [s (s/split cmd #" ")]
-    (if (= "toggle" (first s))
-      (perform-operation ft
-                         (parse-numbers (second s))
-                         (parse-numbers (nth s 3)))
-      (perform-operation (if (= "on" (second s)) fon foff)
-                         (parse-numbers (nth s 2))
-                         (parse-numbers (nth s 4))))))
+  [m command-string]
+  (let [splitted (rest (re-find #"(\w+) (\d+),(\d+) through (\d+),(\d+)" command-string))]
+    (perform-operation (m (first splitted)) (map #(Long/valueOf ^String %) (rest splitted)))))
 
-(def commands (->> "day06.txt"
-                   (io/resource)
-                   (io/reader)
-                   (line-seq)))
+(def commands (read-data 2015 6))
 
 (defn perform
   [op1 op2 op3 commands]
   (clean)
-  (run! (partial parse-command op1 op2 op3) commands)
+  (run! (partial parse-command {"toggle" op1 "on" op2 "off" op3}) commands)
   (reduce + buffer))
 
 (def part-1 (perform toggle turn-on turn-off commands))
+;; => 569999
 
 (defn toggle2 [^long off] (aset ^longs buffer off (+ 2 (aget ^longs buffer off))))
 (defn turn-on2 [^long off] (aset ^longs buffer off (inc (aget ^longs buffer off))))
 (defn turn-off2 [^long off] (aset ^longs buffer off (max 0 (dec (aget ^longs buffer off)))))
 
 (def part-2 (perform toggle2 turn-on2 turn-off2 commands))
+;; => 17836115

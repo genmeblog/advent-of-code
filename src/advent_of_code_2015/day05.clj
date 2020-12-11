@@ -1,12 +1,7 @@
 (ns advent-of-code-2015.day05
-  (:require [clojure.java.io :as io]))
+  (:require [common :refer [read-data]]))
 
-(set! *unchecked-math* :warn-on-boxed)
-(set! *warn-on-reflection* true)
-
-(def strings (-> (io/resource "day05.txt")
-                 (io/reader)
-                 (line-seq)))
+(def strings (read-data 2015 5))
 
 (defn three-vowels? [s] (>= (count (filter #{\a \e \i \o \u} s)) 3))
 (defn double-letter? [ps] (some (fn [[a b]] (= a b)) ps))
@@ -20,6 +15,7 @@
          (not (bad-pairs? ps)))))
 
 (def part-1 (count (filter nice? strings)))
+;; => 238
 
 (defn letter-between? [s] (some (fn [[a _ b]] (= a b)) (partition 3 1 s)))
 (defn double-doubles?
@@ -32,8 +28,10 @@
        (second)
        (frequencies)
        (vals)
-       (some #(> ^long % 1))))
+       (some #(> % 1))))
 
 (defn better-nice? [s] (and (double-doubles? s) (letter-between? s)))
 
 (def part-2 (count (filter better-nice? strings)))
+;; => 69
+

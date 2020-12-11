@@ -1,12 +1,12 @@
 (ns advent-of-code-2015.day04-test
-  (:require [advent-of-code-2015.day04 :refer :all]
-            [clojure.test :refer :all]))
+  (:require [advent-of-code-2015.day04 :as sut]
+            [clojure.test :as t]))
 
-(deftest part-1-test
-  (is (= 609043 (find-md5 five0? "abcdef")))
-  (is (= 1048970 (find-md5 five0? "pqrstuv"))))
+(t/deftest part-1-test
+  (t/is (= 609043 (sut/find-md5 sut/five0? "abcdef")))
+  (t/is (= 1048970 (sut/find-md5 sut/five0? "pqrstuv"))))
 
-(deftest results
-  (is (= 346386 part-1))
-  (is (= 9958218 part-2)))
+(t/deftest sut
+  (t/is (= 346386 sut/part-1))
+  (t/is (= 9958218 sut/part-2)))
 
