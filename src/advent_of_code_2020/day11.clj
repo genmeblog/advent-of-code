@@ -9,11 +9,11 @@
 
 (defrecord Seats [^long rows ^long cols changed? data index])
 
-(defn data
+(defn ->seats
   [input]
   (->Seats (count input) (count (first input)) true (vec (mapcat identity input)) nil))
 
-(def seats (data (read-data 2020 11)))
+(def seats (->seats (read-data 2020 11)))
 
 (defn at
   [^Seats input ^long row ^long col]
@@ -75,12 +75,15 @@
        (reduce (fn [curr [row col :as curr-pos]]
                  (cond
                    (outside? data row col) (reduced curr)
-                   (#{\L} (at data row col)) (reduced curr-pos)
+                   (= \L (at data row col)) (reduced curr-pos)
                    :else curr)) nil)))
+
+(def directions
+  (map (partial apply v/vec2) [[-1 -1] [-1 0] [-1 1] [0 1] [0 -1] [1 -1] [1 0] [1 1]]))
 
 (defn process-directions
   [data pos]
-  (->> [[-1 -1] [-1 0] [-1 1] [0 1] [0 -1] [1 -1] [1 0] [1 1]]
+  (->> directions
        (map (partial process-direction data pos))
        (filter identity)))
 
@@ -88,8 +91,8 @@
   [^Seats input]
   (into {} (for [row (range (.rows input))
                  col (range (.cols input))
-                 :when (#{\L} (at input row col))
-                 :let [pos [row col]]]
+                 :when (= \L (at input row col))
+                 :let [pos (v/vec2 row col)]]
              [pos (process-directions input pos)])))
 
 (defn with-index
@@ -100,10 +103,9 @@
   [^Seats input]
   (let [d (for [^long row (range (.rows input))
                 ^long col (range (.cols input))
-                :let [pos [row col]
-                      v (at input row col)]]
-            (if-let [view ((.index input) pos)]
-              (let [n (count (filter (fn [[row col]] (= \# (at input row col))) view))]
+                :let [v (at input row col)]]
+            (if-let [view ((.index input) (v/vec2 row col))]
+              (let [n (count (filter (fn [pos] (= \# (at input (pos 0) (pos 1)))) view))]
                 (cond
                   (and (>= n 5) (= v \#)) [true \L]
                   (and (zero? n) (= v \L)) [true \#]
