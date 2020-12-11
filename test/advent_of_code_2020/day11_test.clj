@@ -3,7 +3,7 @@
             [clojure.test :as t]
             [clojure.string :as str]))
 
-(def data (sut/data (str/split-lines "L.LL.LL.LL
+(def data (sut/->seats (str/split-lines "L.LL.LL.LL
 LLLLLLL.LL
 L.L.L..L..
 LLLL.LL.LL
