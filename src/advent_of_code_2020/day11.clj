@@ -154,7 +154,7 @@
 
 (draw canvas occupations-near 20)
 
-(c2d/save canvas "images/advent_of_code_2020/day11_far_20.jpg")
+(c2d/save canvas "images/advent_of_code_2020/day11_near_20.jpg")
 
 
 
