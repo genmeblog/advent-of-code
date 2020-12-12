@@ -3,8 +3,6 @@
             [fastmath.core :as m]
             [fastmath.vector :as v]
             [clojure2d.core :as c2d]
-            [fastmath.random :as r]
-            [clojure.string :as str]
             [clojure2d.color :as c]))
 
 (set! *warn-on-reflection* true)
@@ -154,7 +152,7 @@
 
 (draw canvas occupations-near 20)
 
-(c2d/save canvas "images/advent_of_code_2020/day11_near_20.jpg")
+#_(c2d/save canvas "images/advent_of_code_2020/day11_near_20.jpg")
 
 
 
