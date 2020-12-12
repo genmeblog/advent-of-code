@@ -1,7 +1,11 @@
 (ns advent-of-code-2020.day11
   (:require [common :refer [read-data]]
             [fastmath.core :as m]
-            [fastmath.vector :as v]))
+            [fastmath.vector :as v]
+            [clojure2d.core :as c2d]
+            [fastmath.random :as r]
+            [clojure.string :as str]
+            [clojure2d.color :as c]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -117,5 +121,40 @@
 
 (def part-2 (time (occupation-state (with-index seats) step-far)))
 ;; => 2131
+
+;; vis
+
+(def occupations-near (iterate step-near seats))
+(def occupations-far (iterate step-far (with-index seats)))
+
+;; font used: https://fontawesome.com/cheatsheet/free/solid
+
+(defn draw
+  [c occupations id]
+  (let [{:keys [^long rows ^long cols] :as all} (nth occupations id)]
+    (c2d/with-canvas [c c]
+      (-> c
+          (c2d/translate 7 12)
+          (c2d/set-font "Font Awesome 5 Free Solid")
+          (c2d/set-font-attributes 8)
+          (c2d/set-background :black))
+      (doseq [^long row (range rows)
+              ^long col (range cols)
+              :let [v (at all row col)
+                    [color s] (case v
+                                \L [:gray ""]
+                                \# [:white (rand-nth ["" ""])]
+                                [(c/color 80 80 80) ""])]]
+        (c2d/set-color c color)
+        (c2d/text c s (* row 10) (* col 10))))))
+
+(def canvas (c2d/canvas 1000 930))
+
+(def window (c2d/show-window canvas "occupation"))
+
+(draw canvas occupations-near 20)
+
+(c2d/save canvas "images/advent_of_code_2020/day11_far_20.jpg")
+
 
 
