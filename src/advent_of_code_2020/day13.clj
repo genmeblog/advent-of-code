@@ -22,8 +22,7 @@
        (map (fn [^long b] (vector b (- b (mod timestamp b)))))
        (sort-by second)
        (first)
-       (apply *)
-       (long)))
+       (apply *)))
 
 (def part-1 (nearest-depart data))
 ;; => 4808
