@@ -31,17 +31,10 @@
 
 ;;
 
-(defn make-mask-fn
-  [mask]
-  (let [vor (->or-mask mask)
-        vnand (bit-not (->and-mask mask))]
-    (fn [addr] (bit-and (bit-or addr vor) vnand))))
-
 (defn mask-positions
   [mask]
-  (->> mask
-       (map-indexed #(when (= %2 \X) (- 35 %1)))
-       (filter identity)
+  (->> (map-indexed #(when (= %2 \X) (- 35 %1)) mask)
+       (filter some?)
        (reverse)))
 
 (defn addresses
@@ -56,7 +49,8 @@
   [[mem positions mask-fn :as b] line]
   (let [[cmd v] (str/split line #" = ")]
     (if (= "mask" cmd)
-      [mem (mask-positions v) (make-mask-fn v)]
+      (let [mask-or (->or-mask v)]
+        [mem (mask-positions v) #(bit-or % mask-or)])
       (let [addr (-> (re-find #"mem\[(\d+)\]" line) second read-string)
             addrs (addresses positions mask-fn addr)]
         (assoc b 0 (reduce #(assoc %1 %2 (read-string v)) mem addrs))))))
