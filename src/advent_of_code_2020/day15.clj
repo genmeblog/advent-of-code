@@ -56,6 +56,7 @@
 (defn ->IntIntMap
   ^IntIntMap [^long size ^double fill-factor]
   (let [capacity (array-size size fill-factor)]
+    (println "Capacity=" capacity)
     (IntIntMap. (int-array (* 2 capacity))
                 false 0
                 fill-factor 0 (long (* capacity fill-factor))
@@ -126,7 +127,7 @@
   [input ^long n]
   (->Day15 (last input) (count input)
            (reduce (fn [m [^int id ^int v]]
-                     (set-val m v (inc id))) (->IntIntMap (max 16 (* 0.02 n)) 0.1) (map-indexed vector (butlast input)))))
+                     (set-val m v (inc id))) (->IntIntMap (* 0.075 n) 0.5) (map-indexed vector (butlast input)))))
 
 (defn game-step-2
   [^Day15 data]
