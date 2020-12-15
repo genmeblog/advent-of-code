@@ -1,21 +1,18 @@
 (ns advent-of-code-2018.day01
-  (:require [clojure.java.io :as io]))
+  (:require [common :refer [read-data]]))
 
-(set! *unchecked-math* :warn-on-boxed)
-(set! *warn-on-reflection* true)
+(def data (map read-string (read-data 2018 1)))
 
-(def frequencies-diff
-  (delay (map read-string (-> (io/resource "day01.txt")
-                              (io/reader)
-                              (line-seq)))))
+(def part-1 (reduce + data))
+;; => 582
 
-(def freq-dup
-  (delay (let [freqs (reductions + 0 (cycle @frequencies-diff))]
-           (reduce (fn [visited freq]
-                     (if (visited freq)
-                       (reduced freq)
-                       (conj visited freq))) #{} freqs))))
+(defn freq-dup
+  [data]
+  (let [freqs (reductions + 0 (cycle data))]
+    (reduce (fn [visited freq]
+              (if (visited freq)
+                (reduced freq)
+                (conj visited freq))) #{} freqs)))
 
-(time {:final-frequency (reduce + @frequencies-diff)
-       :duplicated-frequency @freq-dup})
-;; => {:final-frequency 582, :duplicated-frequency 488}
+(def part-2 (freq-dup data))
+;; => 488
