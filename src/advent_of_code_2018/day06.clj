@@ -1,40 +1,44 @@
 (ns advent-of-code-2018.day06
-  (:require [clojure.java.io :as io]
+  (:require [common :refer [read-data]]
             [clojure.string :as s]
-            [clojure2d.core :refer :all]
+            [clojure2d.core :as c2d]
             [fastmath.random :as r]
             [clojure2d.color :as c]))
 
-(set! *unchecked-math* :warn-on-boxed)
-(set! *warn-on-reflection* true)
+(def data (read-data 2018 6))
 
-(def coords (delay (mapv #(let [[x y] (s/split % #",\s")]
-                            [(read-string x) (read-string y)])
-                         (->> "day06.txt"
-                              (io/resource)
-                              (io/reader)
-                              (line-seq)))))
+(defn coords
+  [data]
+  (map #(let [[x y] (s/split % #",\s")]
+          [(read-string x) (read-string y)])
+       data))
 
-(defn min-max [[^long minx ^long miny ^long maxx ^long maxy] [^long x ^long y]]
+(defn min-max [[minx miny maxx maxy] [x y]]
   [(min minx x) (min miny y) (max maxx x) (max maxy y)])
 
-(def bounding-box
-  (delay (let [[fx fy] (first @coords)
-               [^long x1 ^long y1 ^long x2 ^long y2] (reduce min-max [fx fy fx fy] (rest @coords))]
-           {:box [[x1 (inc x2)]
-                  [y1 (inc y2)]]
-            :check-box (fn [[^long x ^long y]]
-                         (or (== x1 x) (== x2 x) (== y1 y) (== y2 y)))})))
+(defn bounding-box
+  [data]
+  (let [crds (coords data)
+        [fx fy] (first crds)
+        [x1 y1 x2 y2] (reduce min-max [fx fy fx fy] (rest crds))]
+    {:coords crds
+     :box [[x1 (inc x2)]
+           [y1 (inc y2)]]
+     :check-box (fn [[x y]]
+                  (or (== x1 x) (== x2 x) (== y1 y) (== y2 y)))}))
 
-(def dist-seq
-  (delay (for [^long x (apply range (first (:box @bounding-box)))
-               ^long y (apply range (second (:box @bounding-box)))
-               :let [dists (mapv (fn [[^long cx ^long cy]]
-                                   (+ (Math/abs (- x cx))
-                                      (Math/abs (- y cy)))) @coords)]]
-           [[x y (reduce + dists)] dists])))
+(defn dist-seq
+  [data]
+  (let [{:keys [box coords]} (bounding-box data)]
+    (for [^long x (apply range (first box))
+          ^long y (apply range (second box))
+          :let [dists (map (fn [[^long cx ^long cy]]
+                             (+ (Math/abs (- x cx))
+                                (Math/abs (- y cy)))) coords)]]
+      [[x y (reduce + dists)] dists])))
 
-(defn find-minimal-dist [lst]
+(defn find-minimal-dist
+  [lst]
   (let [[_ coord ^long cnt] (reduce (fn [[^long min-dist ^long curr-coord ^long cnt ^long coord] ^long dist]
                                       (let [ncoord (inc coord)]
                                         (cond
@@ -44,38 +48,44 @@
                                     [Integer/MAX_VALUE -1 0 0] lst)]
     (when (zero? cnt) coord)))
 
-(def voronoi (delay (keep identity
-                          (mapv (fn [[xy lst]]
-                                  (when-let [id (find-minimal-dist lst)] [id xy]))
-                                @dist-seq))))
+(defn voronoi
+  [data]
+  (keep identity
+        (pmap (fn [[xy lst]]
+                (when-let [id (find-minimal-dist lst)] [id xy]))
+              (dist-seq data))))
 
-(defn maximum []
-  (let [on-boundary? (:check-box @bounding-box)]
+(defn maximum
+  [data]
+  (let [on-boundary? (:check-box (bounding-box data))]
     (reduce (fn [^long curr [_ lst]]
               (if (some (comp on-boundary? second) lst)
                 curr
-                (max curr (count lst)))) 0 (group-by first @voronoi))))
+                (max curr (count lst)))) 0 (group-by first (voronoi data)))))
 
-(defn region []
-  (->> (map first @dist-seq)
-       (filter #(< ^long (% 2) 10000))
+(defn region
+  [data tdistance]
+  (->> (map first (dist-seq data))
+       (filter #(< (% 2) tdistance))
        (count)))
 
-(time {:largest-area (maximum)
-       :region-area (region)})
-;; => {:largest-area 4186, :region-area 45509}
+(def part-1 (maximum data))
+;; => 4186
 
-;; draw
+(def part-2 (region data 10000))
+;; => 45509
 
-(let [colors (mapv #(c/gray (* 255 ^double %)) (r/->seq r/default-rng 50))
-      c (canvas 400 400)]
-  (with-canvas [c c]
-    (set-background c :black)
-    (doseq [[id [x y]] @voronoi]
-      (set-color c (colors id))
-      (point c x y))
-    (set-color c :red 200)
-    (doseq [[x y] @coords]
-      (ellipse c x y 3 3)))
-  (show-window {:canvas c})
-  (save c "images/day6.jpg"))
+;; vis
+
+(let [colors (vec (c/resample (c/palette :viridis) 50))
+      c (c2d/canvas 800 800)]
+  (c2d/with-canvas [c c]
+    (c2d/set-background c :black)
+    (doseq [[id [x y]] (voronoi data)]
+      (c2d/set-color c (colors id))
+      (c2d/rect c (* 2 x) (* 2 y) 2 2))
+    (c2d/set-color c :black 200)
+    (doseq [[x y] (coords data)]
+      (c2d/ellipse c (* 2 x) (* 2 y) 5 5)))
+  (c2d/show-window {:canvas c})
+  (c2d/save c "images/advent_of_code_2018/day06.jpg"))

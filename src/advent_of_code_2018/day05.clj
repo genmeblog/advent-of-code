@@ -1,26 +1,23 @@
 (ns advent-of-code-2018.day05
-  (:require [clojure.java.io :as io]
-            [clojure.string :as s]))
+  (:require [common :refer [read-single-line]]))
 
-(set! *unchecked-math* :warn-on-boxed)
-(set! *warn-on-reflection* true)
+(def data (map int (read-single-line 2018 5)))
 
-(def polymer (->> (slurp (io/resource "day05.txt"))
-                  (s/trim)
-                  (mapv int)
-                  (delay)))
-
-(defn react [poly]
-  (reduce #(if (and (seq %1) (== 32 (Math/abs (- ^int (first %1) ^int %2))))
+(defn react
+  [poly]
+  (reduce #(if (and (seq %1) (== 32 (Math/abs ^int (- (first %1) %2))))
              (rest %1)
              (cons %2 %1)) nil poly))
 
-(def removed-unit-reactions
-  (delay (pmap (fn [^long upper ^long lower]
-                 (let [npolymer (remove #(or (== ^int % lower)
-                                             (== ^int % upper)) @polymer)]
-                   (count (react npolymer)))) (range 97 123) (range 65 91))))
+(defn removed-unit-reactions
+  [data]
+  (pmap (fn [^long upper ^long lower]
+          (let [npolymer (remove #(or (== ^int % lower)
+                                      (== ^int % upper)) data)]
+            (count (react npolymer)))) (range 97 123) (range 65 91)))
 
-(time {:reaction-units (count (react @polymer))
-       :shortest (apply min @removed-unit-reactions)})
-;; => {:reaction-units 11540, :shortest 6918}
+(def part-1 (count (react data)))
+;; => 11540
+
+(def part-2 (reduce min (removed-unit-reactions data)))
+;; => 6918

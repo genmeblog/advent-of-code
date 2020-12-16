@@ -1,9 +1,6 @@
 (ns advent-of-code-2018.day04
-  (:require [clojure.java.io :as io]
+  (:require [common :refer [read-data]]
             [clojure.instant :as i]))
-
-(set! *unchecked-math* :warn-on-boxed)
-(set! *warn-on-reflection* true)
 
 (defn log-parser
   "Parse input"
@@ -17,38 +14,41 @@
 (defn pack-events
   "Reorganize input"
   [[id acc] {:keys [guard-id minute]}]
-  (if (nil? guard-id)
+  (if-not guard-id
     [id (update acc id conj minute)]
     [guard-id acc]))
 
+(def data (read-data 2018 4))
+
 ;; read whole log into a map
-(def log
-  (->> (io/resource "day04.txt")
-       (io/reader)
-       (line-seq)
+(defn log
+  [data]
+  (->> data
        (map log-parser)
        (sort-by :date)
        (reduce pack-events [-1 {}])
-       (second)
-       (delay)))
+       (second)))
 
-(def time-stats
-  (delay (for [[k v] @log
-               :let [minutes (->> (reverse v)
-                                  (partition 2)
-                                  (mapcat #(apply range %)))
-                     [minute how-many] (->> minutes
-                                            (frequencies)
-                                            (sort-by val >)
-                                            (first))]]
-           [k how-many minute (count minutes)])))
+(defn time-stats
+  [data]
+  (for [[k v] (log data)
+        :let [minutes (->> (reverse v)
+                           (partition 2)
+                           (mapcat #(apply range %)))
+              [minute how-many] (->> minutes
+                                     (frequencies)
+                                     (sort-by val >)
+                                     (first))]]
+    [k how-many minute (count minutes)]))
 
 (defn id-with-selector
   "Sort and calculate id using selected value from stats"
-  [selector]
-  (let [[^long id _ ^long m] (first (sort-by selector > @time-stats))]
+  [data selector]
+  (let [[^long id _ ^long m] (first (sort-by selector > (time-stats data)))]
     (* id m)))
 
-(time {:strategy-1 (id-with-selector last)
-       :strategy-2 (id-with-selector second)})
-;; => {:strategy-1 20859, :strategy-2 76576}
+(def part-1 (id-with-selector data last))
+;; => 20859
+
+(def part-2 (id-with-selector data second))
+;; => 76576
