@@ -46,7 +46,7 @@
          (map (fn [[nm checker]] ;; find columns for given field
                 [nm (set (filter identity (map-indexed (fn [id c]
                                                          (when (validate-ticket checker c) id)) by-field)))]))
-         (concat [["empty" #{}]])
+         (concat [["empty" #{}]]) ;; add empty set to have difference working
          (sort-by (comp - count second)) ;; sort by size desc
          (partition 2 1) ;; group two 
          (map (fn [[[nm1 p1] [_ p2]]] [nm1 (first (difference p1 p2))])))))
@@ -56,8 +56,7 @@
   (let [my-ticket (vec (first (parse-tickets (second data))))]
     (->> (find-indexes data)
          (filter (comp #(str/starts-with? % "departure") first)) ;; filter departure only
-         (map second) 
-         (map my-ticket)
+         (map (comp my-ticket second))
          (reduce *))))
 
 (def part-2 (match-ranges data))
