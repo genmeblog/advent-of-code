@@ -1,22 +1,20 @@
 (ns advent-of-code-2018.day07
-  (:require [clojure.java.io :as io]
-            [clojure.set :refer :all]))
+  (:require [common :refer [read-data]]
+            [clojure.set :refer [difference]]))
 
-(set! *unchecked-math* :warn-on-boxed)
-(set! *warn-on-reflection* true)
+(def data (read-data 2018 7))
 
-(def coords (->> "day07.txt"
-                 (io/resource)
-                 (io/reader)
-                 (line-seq)
-                 (map #(re-find #"Step\s([A-Z]).*step\s([A-Z])" %))
-                 (map rest)
-                 (mapv #(let [[s1 s2] %]
-                          [(first s1) (first s2)]))
-                 (delay)))
+(defn coords
+  [data]
+  (->> data
+       (map #(rest (re-find #"Step\s([A-Z]).*step\s([A-Z])" %)))
+       (mapv #(let [[s1 s2] %]
+                [(first s1) (first s2)]))))
 
-(defn edges->map [f1 f2] (into {} (map (fn [[k v]]
-                                         [k (set (map f2 v))]) (group-by f1 @coords))))
+(defn edges->map
+  [data f1 f2]
+  (into {} (map (fn [[k v]]
+                  [k (set (map f2 v))]) (group-by f1 (coords data)))))
 
 (def all (set (flatten @coords)))
 (def starts (edges->map first second))

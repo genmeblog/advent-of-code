@@ -56,7 +56,7 @@
 (defn ->IntIntMap
   ^IntIntMap [^long size ^double fill-factor]
   (let [capacity (array-size size fill-factor)]
-    (println "Capacity=" capacity)
+    (println "Capacity=" (* 2 capacity))
     (IntIntMap. (int-array (* 2 capacity))
                 false 0
                 fill-factor 0 (long (* capacity fill-factor))
