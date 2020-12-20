@@ -20,10 +20,10 @@
          (if (#{"a" "b"} l1)
            l1
            (str (build-regex tree l1)
-                (when r1 (str (build-regex tree r1)))))
+                (when (seq r1) (str (build-regex tree r1)))))
          (when (seq l2)
            (str "|" (build-regex tree l2)
-                (when r2 (build-regex tree r2))))
+                (when (seq r2) (build-regex tree r2))))
          ")")))
 
 (defn regex1
@@ -35,7 +35,7 @@
   (re-pattern (let [tr (build-tree data)
                     r31 (build-regex tr "31")
                     r42 (build-regex tr "42")]
-                (str "(:?" r42 "|" r42 "+)"
+                (str "(:?" r42 "+)"
                      "(:?" r42 r31 "|" r42 "{2}" r31 "{2}"
                      "|" r42 "{3}" r31 "{3}" "|" r42 "{4}" r31 "{4}"
                      "|" r42 "{5}" r31 "{5}"")"))))
