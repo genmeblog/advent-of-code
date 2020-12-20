@@ -9,9 +9,8 @@
   (into {} (map (fn [line]
                   (let [[id r] (-> #"(\d+)\:\s(.*)"
                                    (re-find (str/escape line {\" ""}))
-                                   (rest))
-                        ors (str/split r #" \| ")]
-                    [id (map #(str/split % #" ")ors)])) block)))
+                                   (rest))]
+                    [id (map #(str/split % #" ") (str/split r #" \| "))])) block)))
 
 (defn build-regex
   [tree id]
@@ -20,7 +19,7 @@
          (if (#{"a" "b"} l1)
            l1
            (str (build-regex tree l1)
-                (when (seq r1) (str (build-regex tree r1)))))
+                (when (seq r1) (build-regex tree r1))))
          (when (seq l2)
            (str "|" (build-regex tree l2)
                 (when (seq r2) (build-regex tree r2))))
