@@ -70,6 +70,5 @@
   [data]
   (reduce * (take 2 (game data 1000000 10000000))))
 
-(def part-2 (game-2 data))
+(def part-2 (time (game-2 data)))
 ;; => 12757828710
-
