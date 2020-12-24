@@ -7,64 +7,69 @@
 
 (defn make-destination
   [^long mx]
-  (fn [^long id ^long s1 ^long s2 ^long s3]
-    (loop [i (dec id)]
-      (let [ni (if (zero? i) mx i)]
-        (if (or (== ni s1)
-                (== ni s2)
-                (== ni s3))
-          (recur (dec ni))
-          ni)))))
+  (let [mx- (dec mx)]
+    (fn [^long id ^long s1 ^long s2 ^long s3]
+      (loop [i (dec id)]
+        (let [ni (if (neg? i) mx- i)]
+          (if (or (== ni s1)
+                  (== ni s2)
+                  (== ni s3))
+            (recur (dec ni))
+            ni))))))
 
-(def destination-9 (make-destination 9))
+(defn prepare-data
+  [data ^long cnt]
+  (let [data (map dec data)
+        v (int-array (range 1 (inc cnt)))]
+    (doseq [[^int a ^int b] (partition 2 1 data)]
+      (aset ^ints v a b))
+    (if (> cnt (count data))
+      (do
+        (aset ^ints v (dec cnt) ^int (first data))
+        (aset ^ints v ^int (last data) 9))
+      (aset ^ints v ^int (last data) ^int (first data)))
+    [(first data) v]))
 
-(defn step-game1
+(defn step!
+  [data destination ^long id]
+  (let [s1 (aget ^ints data id)
+        s2 (aget ^ints data s1)
+        s3 (aget ^ints data s2)
+        s4 (aget ^ints data s3)
+        d (destination id s1 s2 s3)
+        s5 (aget ^ints data d)]
+    (aset ^ints data id s4)
+    (aset ^ints data d s1)
+    (aset ^ints data s3 s5)
+    s4))
+
+(defn game
+  [data ^long size ^long cnt]
+  (let [[^int start d] (prepare-data data size)
+        destination (make-destination size)]
+    (loop [id start
+           idx (int 0)]
+      (if (< idx cnt)
+        (recur (step! d destination id) (inc idx))
+        (->> (iterate (fn [^long i]
+                        (aget ^ints d i)) 0)
+             (next)
+             (map inc))))))
+
+(defn game-1
   [data]
-  (let [v (first data)
-        phase1 (next data)
-        phase2 (vec (take 3 phase1))
-        phase3 (take 6 (conj (drop 3 phase1) v))
-        nxt (destination-9 v (phase2 0) (phase2 1) (phase2 2))
-        [a b] (split-with (complement #{nxt}) phase3)]
-    (take 9 (next (cycle (concat a [nxt] phase2 (rest b)))))))
+  (->> (game data 9 100)
+       (take 8)
+       (apply str)
+       (read-string)))
 
-(defn first-game
-  [data]
-  (read-string (apply str (take 8 (rest (second (split-with (complement #{1}) (cycle (nth (iterate step-game1 data) 100)))))))))
-
-(def part-1 (first-game data))
+(def part-1 (game-1 data))
 ;; => 24798635
 
-(defn find-id
-  ^long [data ^long id]
-  (loop [idx (int 0)]
-    (if (= id (aget ^ints data idx))
-      idx
-      (recur (inc idx)))))
-
-(def destination-m (make-destination 1000000))
-
-(defn step-game2
+(defn game-2
   [data]
-  (let [v (aget ^ints data 0)
-        s1 (aget ^ints data 1)
-        s2 (aget ^ints data 2)
-        s3 (aget ^ints data 3)
-        nxt (destination-m v s1 s2 s3)
-        pos (find-id data nxt)
-        diff (- pos 3)]
-    (System/arraycopy data 4 data 0 diff)
-    (System/arraycopy data pos data (dec pos) (- 1000000 pos))
-    (aset ^ints data diff s1)
-    (aset ^ints data (inc diff) s2)
-    (aset ^ints data (+ diff 2) s3)
-    (aset ^ints data 999999 v)
-    data))
+  (reduce * (take 2 (game data 1000000 10000000))))
 
-(def data [3 8 9 1 2 5 4 6 7])
-
-(time (let [^ints v (nth (iterate step-game2 (int-array (concat data (range 10 1000001)))) 33)
-            pos (inc (find-id v 1))]
-        (* (aget v pos) (aget v (inc pos)))))
-
+(def part-2 (game-2 data))
+;; => 12757828710
 
