@@ -12,7 +12,10 @@
 
 (defn loop-number
   ^long [^long target]
-  (ffirst (drop-while (comp (fn [^long v] (not= v target)) second) (map-indexed vector (steps 7)))))
+  (->> (steps 7)
+       (map-indexed vector)
+       (drop-while (comp (fn [^long v] (not= v target)) second))
+       (ffirst)))
 
 (def part-1 (nth (steps d1) (loop-number d2)))
 ;; => 4126980
