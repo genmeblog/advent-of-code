@@ -1,5 +1,7 @@
 # advent-of-code
 
+![2020](./badges/img/2020.svg)
+
 ## License
 
 Copyright © 2020 GenerateMe
