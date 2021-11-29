@@ -30,7 +30,8 @@
     (-> (s/select (s/class "star-count") parsed)
         first
         :content
-        first)))
+        first
+	(or "0*"))))
 
 (defn make-badge [year stars]
   (let [params (merge {"label" year, "message" stars} badge-style)]
