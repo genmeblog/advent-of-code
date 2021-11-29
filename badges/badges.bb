@@ -1,4 +1,5 @@
-;; by @tws from slack
+;; by @tws from slack, modified
+
 (ns update-badges
   (:require [babashka.curl :as curl]
             [babashka.pods :as pods]
@@ -43,5 +44,5 @@
         badge (make-badge year stars)]
     (spit path badge)))
 
-(map save-badge! yrs)
+(run! save-badge! yrs)
 
