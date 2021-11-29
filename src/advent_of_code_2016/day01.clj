@@ -1,5 +1,5 @@
 (ns advent-of-code-2016.day01
-  (:require [clojure.java.io :as io]
+  (:require [common :refer [read-single-line]]
             [clojure.string :as str]
             [fastmath.vector :as v]
             [fastmath.core :as m]
@@ -7,11 +7,7 @@
             [clojure2d.core :as c2d]
             [clojure2d.extra.utils :as utils]))
 
-(def data (-> "advent_of_code_2016/day01.txt"
-              (io/resource)
-              (slurp)
-              (str/trim)
-              (str/split #", ")))
+(def data (str/split (read-single-line 2016 1) #", "))
 
 (def directions [[0 1] [1 0] [0 -1] [-1 0]])
 
