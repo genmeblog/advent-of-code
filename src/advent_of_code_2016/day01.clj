@@ -83,4 +83,5 @@
     (let [[x y] (reduce step-by-step [0 [0.0 0.0] #{[0.0 0.0]}] data)]
       (c2d/set-color canvas :red 200)
       (c2d/ellipse canvas x y 10 10)))
-  (utils/show-image canvas))
+  (utils/show-image canvas)
+  #_(c2d/save canvas "images/advent_of_code_2016/day01.jpg"))
