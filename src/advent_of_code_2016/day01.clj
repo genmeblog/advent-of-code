@@ -67,6 +67,7 @@
 (let [canvas (c2d/canvas 600 600)]
   (c2d/with-canvas [canvas canvas]
     (-> canvas
+        (c2d/set-background :white)
         (c2d/translate 100 200)
         (c2d/scale 2.0)
         (c2d/set-color :gray 100)
