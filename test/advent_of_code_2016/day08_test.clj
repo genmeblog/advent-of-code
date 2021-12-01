@@ -11,5 +11,5 @@
                  :screen
                  count))))
 
-(t/deftest part-1
+(t/deftest sut
   (t/is (= 116 sut/part-1)))

@@ -32,3 +32,6 @@
       (slurp)
       (str-as-blocks)))
 
+(defn parse
+  [re s]
+  (map read-string (rest (re-find re s))))

@@ -7,7 +7,7 @@
   [data]
   (->> data
        (partition 2 1)
-       (map (partial apply -))
+       (map (partial reduce -))
        (filter neg?)
        (count)))
 
