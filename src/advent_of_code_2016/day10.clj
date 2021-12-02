@@ -59,4 +59,3 @@
 
 (def part-2 (outputs123 processed))
 ;; => 12803
-

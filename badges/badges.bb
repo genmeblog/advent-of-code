@@ -3,7 +3,6 @@
 (ns update-badges
   (:require [babashka.curl :as curl]
             [babashka.pods :as pods]
-            [clojure.java.io :as io]
             [clojure.string :as str]))
 
 (pods/load-pod 'retrogradeorbit/bootleg "0.1.9")

@@ -1,7 +1,7 @@
 (ns advent-of-code-2021.day01
-  (:require [common :refer [read-data]]))
+  (:require [common :refer [parse read-data]]))
 
-(def data (map read-string (read-data 2021 1)))
+(def data (parse (read-data 2021 1)))
 
 (defn count-incresing
   [data]
