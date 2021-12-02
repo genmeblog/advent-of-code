@@ -33,5 +33,5 @@
       (str-as-blocks)))
 
 (defn parse
-  ([s] (map read-string s))
-  ([re s] (map read-string (rest (re-find re s)))))
+  ([s] (mapv read-string s))
+  ([re s] (mapv read-string (rest (re-find re s)))))
