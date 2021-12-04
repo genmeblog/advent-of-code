@@ -5,10 +5,10 @@
 (defn parser [re in] (parse (str/split in re)))
 
 (defn make-sets
-  [boards]
-  (->> boards
+  [board]
+  (->> board
        (apply map vector) ;; cols
-       (concat boards) ;; rows
+       (concat board) ;; rows
        (map set))) 
 
 (defn process-data
