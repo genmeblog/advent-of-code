@@ -23,7 +23,7 @@
 (defn str-as-blocks
   [s]
   (->> (str/split s  #"\n\n")
-       (map #(str/split % #"\n"))))
+       (map (fn [block] (map str/trim (str/split block #"\n"))))))
 
 (defn read-data-as-blocks
   [year day]

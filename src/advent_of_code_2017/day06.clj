@@ -24,5 +24,5 @@
 (def part-1 (first (iterator data)))
 ;; => 5042
 
-(def part2 (first (iterator (second (iterator data)))))
+(def part-2 (first (iterator (second (iterator data)))))
 ;; => 1086

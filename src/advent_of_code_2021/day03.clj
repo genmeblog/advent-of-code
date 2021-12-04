@@ -32,4 +32,3 @@
 
 (def part-2 (life-support-rating data))
 ;; => 7041258
-
