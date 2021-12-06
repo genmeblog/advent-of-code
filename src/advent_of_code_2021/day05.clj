@@ -14,7 +14,6 @@
     :else (range a (dec b) -1)))
 
 (defn horv [[x1 y1 x2 y2]] (or (= x1 x2) (= y1 y2)))
-
 (defn line [[x1 y1 x2 y2]] (map vector (get-range x1 x2) (get-range y1 y2)))
 
 (defn crosses
