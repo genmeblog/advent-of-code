@@ -6,7 +6,8 @@
             [clojure2d.core :as c2d]
             [fastmath.kernel :as k]
             [clojure2d.extra.utils :as utils]
-            [clojure2d.color :as c]))
+            [clojure2d.color :as c]
+            [fastmath.optimization :as opt]))
 
 (def data (parse (str/split (read-single-line 2021 7) #",")))
 
@@ -45,7 +46,7 @@
                   xx (m/norm submarine mn mx 50 550)]]
       (c2d/line c xx yy pos-m yy))
     
-    (c2d/set-color c (c/brighten 0x0066cc) 150)
+    (c2d/set-color c (c/brighten 0x0066cc) 100)
     (doseq [id (range (- mn 100) (+ mx 100))
             :let [len (* 25000 (density id))
                   xx (m/norm id mn mx 50 550)]]
@@ -56,3 +57,27 @@
 
   (utils/show-image c)
   #_(c2d/save c "images/advent_of_code_2021/day07.jpg"))
+
+;; opt
+
+(defn dist [a b] (int (m/abs (- a b))))
+(defn fuel-burn [data cost-fn m] (reduce #(+ %1 (cost-fn %2 m)) 0 data))
+(defn cost [d] (/ (* d (inc d)) 2))
+(def target1 (comp (partial fuel-burn data dist) int))
+(def target2 (comp (partial fuel-burn data (comp cost dist)) int))
+(defn optimizer [target] 
+  (->> {:bounds [[0 2000]] :N 100}
+       (opt/scan-and-minimize :cmaes target)
+       (second)
+       (int)))
+
+(optimizer target1)
+;; => 336040
+(optimizer target2)
+;; => 94813675
+
+;; --- also valid
+(target1 (fastmath.stats/median data))
+;; => 336040
+(target2 (fastmath.stats/mean data))
+;; => 94813675
