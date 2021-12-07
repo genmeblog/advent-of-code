@@ -37,7 +37,7 @@
   (c2d/set-background c 0x003366)
   (let [[mn mx] (stats/extent data)
         pos-m (m/norm (stats/median data) mn mx 50 550)
-        density (k/kernel-density :gaussian data 8)]
+        density (k/kernel-density :gaussian data 5)]
     
     (c2d/set-color c 0xffe592 150)
     (doseq [[id submarine] (map-indexed vector data)
@@ -46,9 +46,9 @@
       (c2d/line c xx yy pos-m yy))
     
     (c2d/set-color c (c/brighten 0x0066cc) 150)
-    (doseq [id (range -50 1050)
+    (doseq [id (range (- mn 100) (+ mx 100))
             :let [len (* 25000 (density id))
-                  xx (m/norm id 0 1000 50 550)]]
+                  xx (m/norm id mn mx 50 550)]]
       (c2d/line c xx (- 650 len) xx (+ 650 len)))
 
     (c2d/set-color c 0xffe592 150)
