@@ -2,7 +2,7 @@
   (:require [advent-of-code-2021.day06 :as sut]
             [clojure.test :as t]))
 
-(def data (map inc [3 4 3 1 2]))
+(def data [3 4 3 1 2])
 
 (t/deftest test-data
   (t/is (= 26 (sut/lanternfish-count data 18)))

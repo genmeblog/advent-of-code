@@ -30,7 +30,6 @@
 (def part-2 (fuel-burn-valid data))
 ;; => 94813675
 
-
 ;; vis
 
 (c2d/with-canvas [c (c2d/canvas 600 750)]
