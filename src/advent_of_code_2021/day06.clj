@@ -25,3 +25,4 @@
 
 (def part-2 (lanternfish-count data 256))
 ;; => 1765974267455
+
