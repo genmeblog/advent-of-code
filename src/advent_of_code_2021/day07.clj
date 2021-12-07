@@ -49,4 +49,4 @@
     (c2d/set-color c 0xffe592 150)
     (c2d/rect c (dec pos-m) 50 3 500))
   (utils/show-image c)
-  (c2d/save c "images/advent_of_code_2021/day07.jpg"))
+  #_(c2d/save c "images/advent_of_code_2021/day07.jpg"))
