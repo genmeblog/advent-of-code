@@ -35,3 +35,7 @@
 (defn parse
   ([s] (mapv read-string s))
   ([re s] (mapv read-string (rest (re-find re s)))))
+
+(defn split-line
+  ([line] (split-line line #"\s+"))
+  ([line re] (str/split (str/trim line) re)))
