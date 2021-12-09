@@ -66,3 +66,15 @@
   #_(c2d/save c "images/advent_of_code_2021/day08.jpg")
   (utils/show-image c))
 
+(c2d/with-canvas [c (c2d/canvas 600 600)]
+  (c2d/set-background c :navy)
+  (let [basin (make-basin data)
+        basin-color (memoize (fn [_] (c/random-color)))]
+    (doseq [x (range 100)
+            y (range 100)
+            :let [v (get+ data [y x])]
+            :when (< v 9)]
+      (c2d/set-color c (basin-color (basin [[y x] v])))
+      (c2d/rect c (+ 50 (* 5 y)) (+ 50 (* 5 x)) 5 5)))
+  #_(c2d/save c "images/advent_of_code_2021/day08b.jpg")
+  (utils/show-image c))
