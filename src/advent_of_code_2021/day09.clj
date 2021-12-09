@@ -25,14 +25,14 @@
 
 (defn basins
   [data]
-  (update-vals (->> (for [x (range (count (first data)))
-                          y (range (count data))
-                          :let [pos [y x]
-                                v (get-in data pos 10)]
-                          :when (< v 9)]
-                      [pos v])
-                    (map (make-basin data))
-                    (group-by identity)) count))
+  (->> (for [x (range (count (first data)))
+             y (range (count data))
+             :let [pos [y x]
+                   v (get-in data pos 10)]
+             :when (< v 9)]
+         [pos v])
+       (map (make-basin data))
+       (frequencies)))
 
 (defn risk-level
   [data]
