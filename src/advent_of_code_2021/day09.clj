@@ -78,3 +78,4 @@
       (c2d/rect c (+ 50 (* 5 y)) (+ 50 (* 5 x)) 5 5)))
   #_(c2d/save c "images/advent_of_code_2021/day08b.jpg")
   (utils/show-image c))
+
