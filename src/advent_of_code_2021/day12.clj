@@ -18,7 +18,7 @@
 (def not-finished? (comp #(not= 'end %) first :path))
 
 (defn find-paths
-  ([data part1?] (find-paths data part1? [{:visited #{'start} :path '(start)}]))
+  ([data part1?] (find-paths data part1? [{:visited #{} :path '(start)}]))
   ([data part1? paths]
    (if (some not-finished? paths)
      (->> paths
