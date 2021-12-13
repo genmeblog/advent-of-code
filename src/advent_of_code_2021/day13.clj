@@ -1,7 +1,8 @@
 (ns advent-of-code-2021.day13
   (:require [common :refer [read-data-as-blocks parse]]
             [clojure2d.core :as c2d]
-            [clojure2d.extra.utils :as utils]))
+            [clojure2d.extra.utils :as utils]
+            [fastmath.core :as m]))
 
 (defn parser
   [[positions instructions]]
@@ -10,7 +11,7 @@
 
 (def data (parser (read-data-as-blocks 2021 13)))
 
-(defn operate [v a] (let [nv (- v a)] (if (pos? nv) (+ a (- nv)) v)))
+(defn operate [v a] (+ a (- (m/abs (- v a)))))
 (defn fold-y [a [x y]] [x (operate y a)])
 (defn fold-x [a [x y]] [(operate x a) y])
 (def axis-fn {'x fold-x 'y fold-y})
