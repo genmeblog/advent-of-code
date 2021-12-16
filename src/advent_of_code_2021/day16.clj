@@ -25,6 +25,19 @@
   (let [[[b & n] rst] (split-at 5 stream)]
     [b (update ctx :number conj n) rst]))
 
+(declare bits-parser)
+
+(defn parse-op
+  [stream]
+  (let [[b & rst] stream]
+    (if (= b \0)
+      (let [[cnt rst] (split-at 15 rst)
+            [sub rst] (split-at (->long cnt) rst)]
+        [b sub rst])
+      (let [[cnt rst] (split-at 11 rst)
+            [sub rst] (bits-parser rst (->long cnt))]
+        [b sub rst]))))
+
 (defn bits-parser
   ([stream] (bits-parser stream -1))
   ([stream subp] (bits-parser stream :start [] nil subp))
@@ -42,14 +55,10 @@
                  (if (= b \1)
                    (recur rst :number result nctx subp)
                    (recur rst :start (conj result (update nctx :number ->long)) nil (dec subp))))
-       :op (let [[b & rst] stream]
+       :op (let [[b sub rst] (parse-op stream)]
              (if (= b \0)
-               (let [[cnt rst] (split-at 15 rst)
-                     [sub rst] (split-at (->long cnt) rst)]
-                 (recur rst :start (conj result (assoc ctx :subpacket (first (bits-parser sub)))) nil (dec subp)))
-               (let [[cnt rst] (split-at 11 rst)
-                     [sub rst] (bits-parser rst (->long cnt))]
-                 (recur rst :start (conj result (assoc ctx :subpacket sub)) nil (dec subp)))))))))
+               (recur rst :start (conj result (assoc ctx :subpacket (first (bits-parser sub)))) nil (dec subp))
+               (recur rst :start (conj result (assoc ctx :subpacket sub)) nil (dec subp))))))))
 
 (defn parse [data] (-> data ->binary-seq bits-parser first))
 
