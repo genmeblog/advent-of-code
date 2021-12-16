@@ -27,8 +27,6 @@
   (let [[[b & n] rst] (split-at 5 stream)]
     [b (update ctx :number conj n) rst]))
 
-(declare bits-parser)
-
 (defn bits-parser
   ([stream] (bits-parser stream -1))
   ([stream subp] (bits-parser stream :start [] nil subp))
