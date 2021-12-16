@@ -14,8 +14,6 @@
     (->long (flatten s))
     (Long/parseLong (apply str s) 2)))
 
-(defn valid-stream? [s c] (>= (count s) c))
-
 (defn parse-start
   [stream]
   (let [[version rst] (split-at 3 stream)
