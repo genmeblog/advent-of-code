@@ -34,3 +34,4 @@
 
 (defonce part-2 (time (dijkstra (parser data 5))))
 ;; => 2858
+
