@@ -2,13 +2,13 @@
 
 (defn scan
   [{[mnx mxx] :x [mny mxy] :y}]
-  (-> (for [x (range (inc mxx)) ;; x search up to mxx
-            y (range mny (/ mxx 2)) ;; y search cant be lower than bottom, can't be higher than half of right border
-            :let [xs (reductions + (concat (range x 0 -1) (repeat 0)))
-                  ys (reductions + (range y (dec mny) -1))]
-            :when (some #(and (<= mnx (first %) mxx)
-                              (<= mny (second %) mxy)) (map vector xs ys))]
-        (reduce max ys))))
+  (for [x (range (inc mxx)) ;; x search up to mxx
+        y (range mny (/ mxx 2)) ;; y search cant be lower than bottom, can't be higher than half of right border
+        :let [xs (reductions + (concat (range x 0 -1) (repeat 0)))
+              ys (reductions + (range y (dec mny) -1))]
+        :when (some #(and (<= mnx (first %) mxx)
+                          (<= mny (second %) mxy)) (map vector xs ys))]
+    (reduce max ys)))
 
 (def data (scan {:x [195 238] :y [-93 -67]}))
 
