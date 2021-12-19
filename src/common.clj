@@ -3,19 +3,20 @@
             [clojure.string :as str]))
 
 (defn- format-name
-  [year day]
-  (format (str "advent_of_code_" year "/day%02d.txt") day))
+  ([year day] (format-name year day ""))
+  ([year day suff]
+   (format (str "advent_of_code_" year "/day%02d%s.txt") day suff)))
 
 (defn read-single-line
-  [year day]
-  (-> (format-name year day)
+  [& args]
+  (-> (apply format-name args)
       (io/resource)
       (slurp)
       (str/trim)))
 
 (defn read-data
-  [year day]
-  (-> (format-name year day)
+  [& args]
+  (-> (apply format-name args)
       (io/resource)
       (io/reader)
       (line-seq)))
@@ -26,8 +27,8 @@
        (map (fn [block] (map str/trim (str/split block #"\n"))))))
 
 (defn read-data-as-blocks
-  [year day]
-  (-> (format-name year day)
+  [& args]
+  (-> (apply format-name args)
       (io/resource)
       (slurp)
       (str-as-blocks)))
