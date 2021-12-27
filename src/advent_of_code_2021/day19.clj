@@ -24,9 +24,11 @@
                     (group-by first))
                (comp set #(map second %))))
 
-(let [b1 (distances (nth data 3))
-      b2 (distances (nth data 1))]
-  (count (for [[p1 d1] b1
-               [p2 d2] b2
+(def pairs (for [
+               [p1 d1] (distances (nth data 1))
+               [p2 d2] (distances (nth data 0))
                :when (>= (count (set/intersection d1 d2)) 10)]
-           [p1 p2])))
+           [p1 p2]))
+
+
+
