@@ -11,7 +11,7 @@
        (partition-by #(= 'inp (first %)))
        (rest)
        (take-nth 2)
-       (map (juxt (lnth 3) (lnth 4) (lnth 14)))))
+       (map (juxt (lnth 4) (lnth 14)))))
 
 (defn make-pair
   "Create pairs of possible min/max values for given offset"
@@ -23,9 +23,9 @@
 (defmacro find-model
   [typ year m]
   (let [data (parser (read-data year m))
-        symbols (map #(symbol (str "w" %1)) (range (count data)))
-        {:keys [to-for to-let]} (reduce (fn [m [id [op x y]]]
-                                          (if (= op 1)
+        symbols (map #(symbol (str "w" %1)) (range 14))
+        {:keys [to-for to-let]} (reduce (fn [m [id [x y]]]
+                                          (if (> x 9)
                                             (update m :stack conj [id y])
                                             (let [[ref-id ref-y] (first (:stack m))
                                                   diff (+ ref-y x)]
@@ -49,8 +49,8 @@
 ;; mul x 0
 ;; add x z
 ;; mod x 26
-;; div z 1 ;; take this, might be div z 26
-;; add x 14 ;; take this (X)
+;; div z 1
+;; add x 14 ;; take this (X), if X > 9 it's grow part
 ;; eql x w
 ;; eql x 0 ;; for 'div z 26' part, we want to have x=0, this way we will have only z/26 left without any addition
 ;; mul y 0
@@ -70,20 +70,20 @@
 ;; from equality we want to have related_w = R + X
 
 ;; data
-;; => ([1 14 0] ;; w0
-;;     [1 13 12] ;; w1
-;;     [1 15 14] ;; w2 ...
-;;     [1 13 0]
-;;     [26 -2 3]
-;;     [1 10 15]
-;;     [1 13 11]
-;;     [26 -15 12]
-;;     [1 11 1]
-;;     [26 -9 12]
-;;     [26 -9 3]
-;;     [26 -7 10]
-;;     [26 -4 14]
-;;     [26 -6 12])
+;; => ([14 0] ;; w0
+;;     [13 12] ;; w1
+;;     [15 14] ;; w2 ...
+;;     [13 0]
+;;     [-2 3]
+;;     [10 15]
+;;     [13 11]
+;;     [-15 12]
+;;     [11 1]
+;;     [-9 12]
+;;     [-9 3]
+;;     [-7 10]
+;;     [-4 14]
+;;     [-6 12])
 
 ;; w0 0 (Y)
 ;; w1 12
