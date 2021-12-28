@@ -16,25 +16,28 @@
 (defn make-pair
   "Create pairs of possible min/max values for given offset"
   [off]
-  (if (neg? off)
-    [(inc (- off)) 9]
-    [1 (- 9 off)]))
+  (set (if (neg? off)
+         [(inc (- off)) 9]
+         [1 (- 9 off)])))
 
 (defmacro find-model
-  [typ year m]
+  [selector year m]
   (let [data (parser (read-data year m))
         symbols (map #(symbol (str "w" %1)) (range 14))
-        {:keys [to-for to-let]} (reduce (fn [m [id [x y]]]
-                                          (if (> x 9)
-                                            (update m :stack conj [id y])
-                                            (let [[ref-id ref-y] (first (:stack m))
-                                                  diff (+ ref-y x)]
-                                              (-> (update m :stack rest)
-                                                  (update :to-for conj `(make-pair ~diff) ref-id)
-                                                  (update :to-let conj `(+ ~ref-id ~diff) id))))) {} (map vector symbols data))]
-    `(~typ (sort (for [~@to-for
-                       :let [~@to-let]]
-                   (read-string (str ~@symbols)))))))
+        parts (reduce (fn [m [id [x y]]]
+                        (if (> x 9)
+                          (update m :stack conj [id y])
+                          (let [[ref-id ref-y] (first (:stack m))
+                                diff (+ ref-y x)]
+                            (-> (update m :stack rest)
+                                (update :to-for conj (make-pair diff) ref-id)
+                                (update :to-let conj `(+ ~ref-id ~diff) id))))) {} (map vector symbols data))]
+    `(-> (for [~@(:to-for parts)
+               :let [~@(:to-let parts)]]
+           (str ~@symbols))
+         (sort)
+         (~selector)
+         (read-string))))
 
 
 (def part-1 (find-model last 2021 24))
