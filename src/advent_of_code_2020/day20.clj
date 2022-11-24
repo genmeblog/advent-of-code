@@ -39,7 +39,7 @@
        (filter (comp #(= 2 %) count second))
        (map first)))
 
-(find-orientations data)
+(first (find-orientations data))
 
 (def part-1 (reduce * (find-corners data)))
 ;; => 5966506063747
