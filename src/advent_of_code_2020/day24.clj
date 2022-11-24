@@ -87,5 +87,6 @@
 
 (c2d/show-window {:canvas vis-res})
 
-(c2d/save vis-res "images/advent_of_code_2020/day24_100.jpg")
+(comment
+  (c2d/save vis-res "images/advent_of_code_2020/day24_100.jpg"))
 

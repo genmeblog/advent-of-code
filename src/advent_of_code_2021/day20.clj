@@ -1,7 +1,5 @@
 (ns advent-of-code-2021.day20
-  (:require [common :refer [read-data-as-blocks]]
-            [clojure2d.core :as c2d]
-            [clojure2d.extra.utils :as utils]))
+  (:require [common :refer [read-data-as-blocks]]))
 
 (defn ->v [line] (mapv {\. \0 \# \1} line))
 (defn parser

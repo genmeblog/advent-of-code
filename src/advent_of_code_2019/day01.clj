@@ -1,5 +1,5 @@
 (ns advent-of-code-2019.day01
-  (:require [clojure.java.io :as io]))
+  (:require [common :refer [read-data]]))
 
 (set! *unchecked-math* :warn-on-boxed)
 (set! *warn-on-reflection* true)
@@ -8,10 +8,7 @@
 (defn required-fuel ^long [^long in] (- (int (/ in 3)) 2))
 
 ;; load data and calculate required fuel
-(def fuel-data (map (comp required-fuel read-string)
-                    (-> (io/resource "day01.txt")
-                        (io/reader)
-                        (line-seq))))
+(def fuel-data (map (comp required-fuel read-string) (read-data 2019 1)))
 
 ;; sum of required fuel
 (def part-1 (reduce + fuel-data))

@@ -1,5 +1,5 @@
 (ns advent-of-code-2019.day05
-  (:require [clojure.java.io :as io]
+  (:require [common :refer [read-single-line]]
             [clojure.string :as s]))
 
 (set! *unchecked-math* true)
@@ -7,12 +7,11 @@
 
 ;; load data
 (def machine {:input [1]
-              :output []
-              :pc 0
-              :memory (mapv read-string
-                            (-> (io/resource "day05.txt")
-                                (slurp)
-                                (s/split #",")))})
+            :output []
+            :pc 0
+            :memory (mapv read-string
+                          (-> (read-single-line 2019 5)
+                              (s/split #",")))})
 
 (defn step [m c] (update m :pc + c))
 (defmacro R [memory a mode] `(if ~mode (~memory ~a) ~a))
@@ -46,6 +45,6 @@
   [{:keys [^long pc input output program]}]
   (let [[opcode mode1 mode2] (parse-opcode (program pc))]))
 
-(def executor-0 (comp first executor make-program))
+#_(def executor-0 (comp first executor make-program))
 
-(def part-1 (executor-0 12 2))
+#_(def part-1 (executor-0 12 2))

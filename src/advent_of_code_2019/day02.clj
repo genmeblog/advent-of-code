@@ -1,5 +1,5 @@
 (ns advent-of-code-2019.day02
-  (:require [clojure.java.io :as io]
+  (:require [common :refer [read-single-line]]
             [clojure.string :as s]))
 
 (set! *unchecked-math* :warn-on-boxed)
@@ -7,9 +7,8 @@
 
 ;; load data
 (def program (mapv read-string
-                   (-> (io/resource "day02.txt")
-                       (slurp)
-                       (s/split #","))))
+                 (-> (read-single-line 2019 2)
+                     (s/split #","))))
 
 ;; program creator with initial data
 (defn make-program

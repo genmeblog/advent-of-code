@@ -1,5 +1,5 @@
 (ns advent-of-code-2019.day03
-  (:require [clojure.java.io :as io]
+  (:require [common :refer [read-data]]
             [clojure.string :as s]
             [fastmath.core :as m]))
 
@@ -44,11 +44,9 @@
   [[id wire]]
   (rest (reductions process-segment [0 0 0 0 nil 0 id] (s/split wire #","))))
 
-(def segments (->> (-> (io/resource "day03.txt")
-                       (io/reader)
-                       (line-seq))
-                   (map-indexed vector)
-                   (mapcat process-wire)))
+(def segments (->> (read-data 2019 3)
+                 (map-indexed vector)
+                 (mapcat process-wire)))
 
 (defn intersections
   [segments]

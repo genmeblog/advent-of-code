@@ -83,7 +83,7 @@
             (c2d/set-background :navy)))
 (def window (c2d/show-window {:canvas canvas}))
 
-(dotimes [t 400]
+(dotimes [t 10 #_400]
   (let [i (interpolator (:grid (second (nth data t))))]
     (c2d/with-canvas [c canvas]
       (c2d/set-background c :navy 20)

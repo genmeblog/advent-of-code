@@ -2,7 +2,6 @@
   (:require [common :refer [read-data]]
             [clojure.string :as s]
             [clojure2d.core :as c2d]
-            [fastmath.random :as r]
             [clojure2d.color :as c]))
 
 (def data (read-data 2018 6))
@@ -88,4 +87,4 @@
     (doseq [[x y] (coords data)]
       (c2d/ellipse c (* 2 x) (* 2 y) 5 5)))
   (c2d/show-window {:canvas c})
-  (c2d/save c "images/advent_of_code_2018/day06.jpg"))
+  #_(c2d/save c "images/advent_of_code_2018/day06.jpg"))
