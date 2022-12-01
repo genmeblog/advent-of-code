@@ -4,7 +4,7 @@
 (def data (map read-string (read-data 2021 18)))
 
 (defn find-paths
-  ([tree] (find-paths tree [] {:pos nil :buff []}))
+  ([tree] (find-paths tree [] {:buff []}))
   ([tree current buff]
    (if (vector? tree)
      (if (and (not (:pos buff))
@@ -67,10 +67,10 @@
        (* 2 (magnitude (second tree))))
     tree))
 
-(defonce part-1 (magnitude (reduce-numbers data)))
+(def part-1 (magnitude (reduce-numbers data)))
 
-(defonce part-2 (->> (for [n1 data
-                           n2 data
-                           :when (not= n1 n2)]
-                       (magnitude (add n1 n2)))
-                     (reduce max)))
+(def part-2 (->> (for [n1 data
+                     n2 data
+                     :when (not= n1 n2)]
+                 (magnitude (add n1 n2)))
+               (reduce max)))

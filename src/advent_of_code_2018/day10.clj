@@ -1,5 +1,5 @@
 (ns advent-of-code-2018.day10
-  (:require [clojure.java.io :as io]
+  (:require [common :refer [read-data]]
             [clojure2d.core :refer :all]
             [fastmath.core :as m]))
 
@@ -10,11 +10,8 @@
 (def ^:const ^int maxi Integer/MAX_VALUE)
 
 (def coords (mapv #(let [[x y vx vy] (map read-string (rest (re-find #"position=<([-\s]?\d+),\s+([-\s]?\d+)>\svelocity=<([-\s]?\d+),\s+([-\s]?\d+)>" %)))]
-                     [[x y] [vx vy]])
-                  (->> "day10.txt"
-                       (io/resource)
-                       (io/reader)
-                       (line-seq))))
+                   [[x y] [vx vy]])
+                (read-data 2018 10)))
 
 (defn min-max [[^long minx ^long miny ^long maxx ^long maxy] [^long x ^long y]]
   [(min minx x) (min miny y) (max maxx x) (max maxy y)])
@@ -25,6 +22,8 @@
   ([^long scale [[^long x ^long y] [^long vx ^long vy :as v]]]
    [[(+ x (* scale vx)) (+ y (* scale vy))] v])
   ([v] (next-move 1 v)))
+
+
 
 (defn animate
   [canvas _ _ [crds ^long time ^long curr-area :as state]]

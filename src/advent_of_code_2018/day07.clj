@@ -2,8 +2,6 @@
   (:require [common :refer [read-data]]
             [clojure.set :refer [difference]]))
 
-(def data (read-data 2018 7))
-
 (defn coords
   [data]
   (->> data
@@ -11,14 +9,16 @@
        (mapv #(let [[s1 s2] %]
                 [(first s1) (first s2)]))))
 
+(def data (coords (read-data 2018 7)))
+
 (defn edges->map
   [data f1 f2]
   (into {} (map (fn [[k v]]
-                  [k (set (map f2 v))]) (group-by f1 (coords data)))))
+                  [k (set (map f2 v))]) (group-by f1 data))))
 
-(def all (set (flatten @coords)))
-(def starts (edges->map first second))
-(def ends (edges->map second first))
+(def all (set (flatten data)))
+(def starts (edges->map data first second))
+(def ends (edges->map data second first))
 (def starting (apply sorted-set (difference all (set (keys ends)))))
 
 (defn remove-ends
@@ -46,8 +46,6 @@
   (if (and (seq candidates) (< (count workers) 5))
     (recur (rest candidates) (conj workers [(first candidates) (- (int (first candidates)) 4)]))
     [candidates workers]))
-
-(apply min-key second (second (fill-workers starting [])))
 
 (defn calc-time
   [^long time workers]

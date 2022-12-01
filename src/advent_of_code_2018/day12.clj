@@ -1,11 +1,11 @@
 (ns advent-of-code-2018.day12
-  (:require [clojure.java.io :as io]
+  (:require [common :refer [read-data]]
             [clojure.string :as str]))
 
 (set! *unchecked-math* :warn-on-boxed)
 (set! *warn-on-reflection* true)
 
-(def input (delay (line-seq (io/reader (io/resource "day12.txt")))))
+(def input (delay (read-data 2018 12)))
 
 ;; dots to spaces, for trim
 (defn replace-dot [s] (str/replace s #"\." " "))

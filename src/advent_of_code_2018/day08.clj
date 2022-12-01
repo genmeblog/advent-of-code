@@ -1,8 +1,8 @@
 (ns advent-of-code-2018.day08
-  (:require [clojure.java.io :as io]
+  (:require [common :refer [read-single-line]]
             [clojure.string :as str]))
 
-(def tree (mapv read-string (str/split (slurp (io/resource "day08.txt")) #"\s+")))
+(def tree (mapv read-string (str/split (read-single-line 2018 8) #"\s+")))
 
 (defn process-tree
   [sum children metadata tree]
@@ -32,4 +32,4 @@
 
 
 
-(parse-tree {} [0 3 3 1 444])
+#_(parse-tree {} [0 3 3 1 444])

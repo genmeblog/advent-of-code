@@ -40,18 +40,18 @@
               z (vals (select-keys (get-in dict [:z :positions]) (range z1 (inc z2))))]
           [x y z]))))
 
-(def res (reduce (partial on-off (small-cubes data)) #{} data))
+#_(def res (reduce (partial on-off (small-cubes data)) #{} data))
+
+(comment
+  (on-off (small-cubes data) #{} (first data))
+
+  (small-cubes data)
+
+  (take 2 data)
+  ;; => ([on -5 46 -32 20 -18 26] [on -47 -1 -28 19 -49 3])
 
 
-(on-off (small-cubes data) #{} (first data))
-
-(small-cubes data)
-
-(take 2 data)
-;; => ([on -5 46 -32 20 -18 26] [on -47 -1 -28 19 -49 3])
-
-
-(count (distinct (concat (map #(nth % 6) data) (map #(nth % 5) data))))
+  (count (distinct (concat (map #(nth % 6) data) (map #(nth % 5) data)))))
 
 
 

@@ -40,7 +40,13 @@
        (map first)))
 
 (first (find-orientations data))
+;; => [2671
+;;     [[2671 1399 ([:t- :l] [:t :l-])]
+;;      [2671 1487 ([:b :b-] [:b- :b])]
+;;      [2671 1531 ([:l- :r] [:l :r-])]
+;;      [2671 2423 ([:r- :b] [:r :b-])]]]
 
 (def part-1 (reduce * (find-corners data)))
 ;; => 5966506063747
 
+(first (find-orientations data))

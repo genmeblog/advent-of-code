@@ -1,11 +1,11 @@
 (ns advent-of-code-2018.day09
-  (:require [clojure.java.io :as io])
+  (:require [common :refer [read-single-line]])
   (:import [java.util LinkedList]))
 
 (set! *unchecked-math* :warn-on-boxed)
 (set! *warn-on-reflection* true)
 
-(def game-data (delay (mapv read-string (rest (re-find #"(\d+) player.+ (\d+) points" (slurp (io/resource "day09.txt")))))))
+(def game-data (delay (mapv read-string (rest (re-find #"(\d+) player.+ (\d+) points" (read-single-line 2018 9))))))
 
 (defprotocol MarbleListProto
   (insert-at+2 [l v])
@@ -40,7 +40,7 @@
 (defn marble-game
   [^long players ^long max-marble]
   (fn [^long id lst points]
-    (when (zero? (rem id 100000)) (println id))
+    #_(when (zero? (rem id 100000)) (println id))
     (if (> id max-marble)
       (apply max (vals points))
       (if (zero? (rem id 23))
