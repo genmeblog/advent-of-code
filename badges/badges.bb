@@ -1,4 +1,4 @@
-;; by @tws from slack, modified
+;; by @tschady from slack, modified
 
 (ns update-badges
   (:require [babashka.curl :as curl]
