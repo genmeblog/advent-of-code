@@ -1,9 +1,6 @@
 (ns advent-of-code-2019.day04
   (:require [clojure.set :as s]))
 
-(set! *unchecked-math* :warn-on-boxed)
-(set! *warn-on-reflection* true)
-
 (def data (map str (range 245182 790572)))
 
 (defn check-multiples [pds] (set (map first (filter (partial apply =) pds))))

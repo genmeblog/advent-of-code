@@ -1,9 +1,6 @@
 (ns advent-of-code-2019.day01
   (:require [common :refer [read-data]]))
 
-(set! *unchecked-math* :warn-on-boxed)
-(set! *warn-on-reflection* true)
-
 ;; required fuel formula
 (defn required-fuel ^long [^long in] (- (int (/ in 3)) 2))
 

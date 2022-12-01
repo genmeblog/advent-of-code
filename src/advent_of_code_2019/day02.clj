@@ -2,9 +2,6 @@
   (:require [common :refer [read-single-line]]
             [clojure.string :as s]))
 
-(set! *unchecked-math* :warn-on-boxed)
-(set! *warn-on-reflection* true)
-
 ;; load data
 (def program (mapv read-string
                  (-> (read-single-line 2019 2)

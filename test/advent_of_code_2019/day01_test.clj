@@ -1,20 +1,20 @@
 (ns advent-of-code-2019.day01-test
-  (:require [advent-of-code-2019.day01 :refer :all]
-            [clojure.test :refer :all]))
+  (:require [advent-of-code-2019.day01 :as sut]
+            [clojure.test :as t]))
 
-(deftest required-fuel-test
-  (is (= 2 (required-fuel 12)))
-  (is (= 2 (required-fuel 14)))
-  (is (= 654 (required-fuel 1969)))
-  (is (= 33583 (required-fuel 100756))))
+(t/deftest required-fuel-test
+  (t/is (= 2 (sut/required-fuel 12)))
+  (t/is (= 2 (sut/required-fuel 14)))
+  (t/is (= 654 (sut/required-fuel 1969)))
+  (t/is (= 33583 (sut/required-fuel 100756))))
 
-(def required-total (comp required-fuel-total required-fuel))
+(def required-total (comp sut/required-fuel-total sut/required-fuel))
 
-(deftest total-fuel-test
-  (is (= 2 (required-total 14)))
-  (is (= 966 (required-total 1969)))
-  (is (= 50346 (required-total 100756))))
+(t/deftest total-fuel-test
+  (t/is (= 2 (required-total 14)))
+  (t/is (= 966 (required-total 1969)))
+  (t/is (= 50346 (required-total 100756))))
 
-(deftest results
-  (is (= 3497998 part-1))
-  (is (= 5244112 part-2)))
+(t/deftest results
+  (t/is (= 3497998 sut/part-1))
+  (t/is (= 5244112 sut/part-2)))
