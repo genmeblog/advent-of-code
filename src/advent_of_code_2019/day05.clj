@@ -8,7 +8,7 @@
 
 (defn make-machine
   [memory input]
-  {:input [input]
+  {:input input
    :output []
    :pc 0
    :memory memory})
@@ -72,15 +72,15 @@
        first))
 
 (defn run-part
-  ([memory] (run-part memory 0))
+  ([memory] (run-part memory [0]))
   ([memory input]
    (-> (make-machine memory input)
        (run-machine)
        :output
        last)))
 
-(def part-1 (run-part memory 1))
+(def part-1 (run-part memory [1]))
 ;; => 9219874
 
-(def part-2 (run-part memory 5))
+(def part-2 (run-part memory [5]))
 ;; => 5893654
