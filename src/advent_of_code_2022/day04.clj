@@ -7,8 +7,7 @@
 (def data (map parse (read-data 2022 4)))
 
 (defn include? [[a b c d]]
-  (or (and (<= a c) (>= b d))
-      (and (<= c a) (>= d b))))
+  (or (<= a c d b) (<= c a b d)))
 
 (defn overlap? [[a b c d]]
   (or (<= c b d) (<= a d b)))
