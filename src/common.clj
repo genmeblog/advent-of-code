@@ -22,9 +22,11 @@
       (line-seq)))
 
 (defn str-as-blocks
-  [s]
-  (->> (str/split s  #"\n\n")
-       (map (fn [block] (map str/trim (str/split block #"\n"))))))
+  ([s] (str-as-blocks s true))
+  ([s trim?]
+   (->> (str/split s  #"\n\n")
+        (map (fn [block] (let [sb (str/split block #"\n")]
+                          (if trim? (map str/trim sb) sb)))))))
 
 (defn read-data-as-blocks
   [& args]
@@ -32,6 +34,13 @@
       (io/resource)
       (slurp)
       (str-as-blocks)))
+
+(defn read-data-as-blocks-no-trim
+  [& args]
+  (-> (apply format-name args)
+      (io/resource)
+      (slurp)
+      (str-as-blocks false)))
 
 (defn parse
   ([s] (mapv read-string s))
