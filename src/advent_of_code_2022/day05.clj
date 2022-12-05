@@ -7,8 +7,7 @@
 
 (defn parse-instructions
   [line]
-  (->> (re-matches #".*\s(\d+)\s.*\s(\d+)\s.*\s(\d+)" line)
-       (rest)
+  (->> (re-seq #"\d+" line)
        (map (comp dec read-string))))
 
 (defn parse
@@ -39,3 +38,4 @@
 
 (def part-2 (move data true))
 ;; => "TDGJQTZSL"
+
