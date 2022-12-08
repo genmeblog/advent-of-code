@@ -2,13 +2,13 @@
   (:require [common :refer [read-data split-line]]
             [clojure.string :as str]))
 
-(defn add-listing
-  [tree path listing]
-  (reduce (fn [t line]                            
-            (let [[a b] (split-line line)]
-              (if (str/starts-with? line "d")
-                (assoc-in t (conj path b) {})
-                (update-in t (conj path :files) (fnil + 0) (parse-long a))))) tree listing))
+(defn get-size
+  [listing]
+  (->> listing
+       (map (comp first split-line))
+       (remove #{"dir"})
+       (map parse-long)
+       (reduce +)))
 
 (defn build-tree
   ([listing] (build-tree {} [] (rest listing)))
@@ -16,7 +16,7 @@
    (if line
      (if (str/starts-with? line "$ ls")
        (let [[listing rst] (split-with #(not (str/starts-with? % "$")) rst)]
-         (recur (add-listing tree path listing) path rst))
+         (recur (assoc-in tree (conj path :files) (get-size listing)) path rst))
        (let [f (last (split-line line))]
          (if (= ".." f)
            (recur tree (subvec path 0 (dec (count path))) rst)
@@ -48,4 +48,3 @@
 
 (def part-2 (find-smallest-dir data))
 ;; => 1300850
-
