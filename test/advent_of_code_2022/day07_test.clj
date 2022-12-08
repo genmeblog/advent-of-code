@@ -25,7 +25,7 @@ $ ls
 4060174 j
 8033020 d.log
 5626152 d.ext
-7214296 k" str/split-lines sut/build-tree sut/du sut/sizes))
+7214296 k" str/split-lines sut/build-tree sut/sizes))
 
 (t/deftest example
   (t/is (= 95437 (sut/total-small-sizes data)))

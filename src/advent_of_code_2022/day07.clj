@@ -23,20 +23,16 @@
            (recur tree (conj path f) rst))))
      tree)))
 
-(defn du
-  [tree]
-  (reduce (fn [t [k v]]
-            (let [nv (if (map? v) (du v) v)]
-              (-> (assoc t k nv)
-                  (update :size (fnil + 0) (or (:size nv) nv))))) tree tree))
-
 (defn sizes
   [tree]
   (conj (->> (vals tree)
              (filter map?)
-             (mapcat sizes)) (:size tree)))
+             (mapcat sizes))
+        (->> (tree-seq map? vals tree)
+             (remove map?)
+             (reduce +))))
 
-(def data (-> (read-data 2022 7) build-tree du sizes))
+(def data (-> (read-data 2022 7) build-tree sizes))
 
 (defn total-small-sizes
   [data]
