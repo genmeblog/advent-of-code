@@ -22,9 +22,9 @@ L 25
 U 20")))
 
 (t/deftest examples
-  (t/is (= 13 (sut/last-tail-count 1 data2)))
-  (t/is (= 1 (sut/last-tail-count 9 data2)))
-  (t/is (= 36 (sut/last-tail-count 9 data3))))
+  (t/is (= 13 (sut/last-knot-count 1 data2)))
+  (t/is (= 1 (sut/last-knot-count 9 data2)))
+  (t/is (= 36 (sut/last-knot-count 9 data3))))
 
 (t/deftest sut
   (t/is (= 6522 sut/part-1))
