@@ -50,24 +50,29 @@
 
 ;;
 
-(c2d/with-canvas [c (c2d/canvas 900 800)]
-  (c2d/set-background c 0)
-  (c2d/translate c 250 250)
-  (c2d/set-color c :green)
-  (c2d/line c -250 200 650 200)
-  (c2d/set-color c :lightblue 200)
-  (c2d/rect c 0 0 400 400 true)
-  (doseq [[x y r bx by] data]
-    (c2d/set-color c :white)
-    (c2d/crect c (/ x 10000.0) (/ y 10000.0) 3 3)
-    (c2d/set-color c :red)
-    (c2d/crect c (/ bx 10000.0) (/ by 10000.0) 10 10)
-    (c2d/set-color c "#aa" 100)
-    (c2d/filled-with-stroke c (c/gray 0xaa 100) (c/gray 0xbb 150) 
-                            c2d/path (map #(v/div % 10000.0) [[(- x r) y]
-                                                              [x (- y r)]
-                                                              [(+ x r) y]
-                                                              [x (+ y r)]]) true))
-  (c2d/save c "images/advent_of_code_2022/day15.jpg")
-  (utils/show-image c))
+(let [xx (/ (quot part-2 4000000) 10000.0)
+      yy (/ (mod part-2 4000000) 10000.0)]
+  (c2d/with-canvas [c (c2d/canvas 900 800)]
+    (c2d/set-background c 0)
+    (c2d/translate c 250 250)
+    (c2d/set-color c :green)
+    (c2d/line c -250 200 650 200)
+    (c2d/set-color c :lightblue 200)
+    (c2d/rect c 0 0 400 400 true)
+    (doseq [[x y r bx by] data]
+      (c2d/set-color c :white)
+      (c2d/crect c (/ x 10000.0) (/ y 10000.0) 3 3)
+      (c2d/set-color c :red)
+      (c2d/crect c (/ bx 10000.0) (/ by 10000.0) 10 10)
+      (c2d/set-color c "#aa" 100)
+      (c2d/filled-with-stroke c (c/gray 0xaa 100) (c/gray 0xbb 150) 
+                              c2d/path (map #(v/div % 10000.0) [[(- x r) y]
+                                                                [x (- y r)]
+                                                                [(+ x r) y]
+                                                                [x (+ y r)]]) true))
+    (c2d/set-color c :yellow)
+    (c2d/ellipse c xx yy 8 8 true)
+    (c2d/ellipse c xx yy 12 12 true)
+    #_(c2d/save c "images/advent_of_code_2022/day15.jpg")
+    (utils/show-image c)))
 
