@@ -1,5 +1,5 @@
 (ns advent-of-code-2022.day12
-  (:require [common :refer [read-data]]))
+  (:require [common :refer [read-data bfs->path-count]]))
 
 ;; (int \S) ;; => 83
 ;; (int \E) ;; => 69
@@ -31,24 +31,9 @@
 
 (def data (parse-data (read-data 2022 12)))
 
-(defn traverse
-  [{:keys [data start end]}]
-  (let [bfs (fn [[[v :as q] explored path]]
-              (if (and v (not= v end))
-                (recur (reduce (fn [[q explored path :as buff] pos]
-                                 (if-not (explored pos)
-                                   [(conj q pos)
-                                    (conj explored pos)
-                                    (assoc path pos v)]
-                                   buff)) [(pop q) explored path] (around-fn data v)))
-                path))]
-    (bfs [(conj clojure.lang.PersistentQueue/EMPTY start) #{start} {}])))
-
 (defn get-path-count
-  [{:keys [start end] :as in}]
-  (->> (iterate (traverse in) end)
-       (take-while (complement #{start}))
-       (count)))
+  [{:keys [data start end]}]
+  (bfs->path-count (partial around-fn data) start end))
 
 (def part-1 (get-path-count data))
 ;; => 534
