@@ -8,6 +8,7 @@
 ![2020](./badges/img/2020.svg)
 ![2021](./badges/img/2021.svg)
 ![2022](./badges/img/2022.svg)
+![2023](./badges/img/2022.svg)
 
 ## License
 
