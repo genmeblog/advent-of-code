@@ -7,30 +7,29 @@
                 "six" "6" "seven" "7" "eight" "8" "nine" "9"})
 
 (defn get-digit [n] (get substitutes n n))
-
 (def selector (juxt first last))
 
-(defn parse-line  [re process l]
+(defn parse-line  [re l]
   (->> (re-seq re l)
        (selector)
-       (map (comp get-digit process))
+       (map (comp get-digit second))
        (apply str)
        (parse-long)))
 
 (defn summarize
-  ([data re] (summarize data re identity))
-  ([data re process]
-   (-> (map (partial parse-line re process))
-       (transduce + data))))
+  [data re]
+  (->> data
+       (map (partial parse-line re))
+       (reduce +)))
 
 (defn part-1-solution [data]
-  (summarize data #"\d"))
+  (summarize data #"(\d)"))
 
 (def part-1 (part-1-solution data))
 ;; => 55029
 
 (defn part-2-solution [data]
-  (summarize data #"(?=(one|two|three|four|five|six|seven|eight|nine|\d))" second))
+  (summarize data #"(?=(one|two|three|four|five|six|seven|eight|nine|\d))"))
 
 (def part-2 (part-2-solution data))
 ;; => 55686
