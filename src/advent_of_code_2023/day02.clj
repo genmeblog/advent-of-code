@@ -19,18 +19,17 @@
 (defn parse-line [l]
   (let [[_ id r] (re-find #"^Game\s(\d+): (.+)" l)
         subsets (str/split r #";\s")]
-    [(parse-long id) (map parse-subset subsets)]))
+    [(parse-long id) (->> subsets
+                          (map parse-subset)
+                          (reduce v/emx))]))
 
 (defn parse-data [data]
   (map parse-line data))
 
 (def data (parse-data (read-data 2023 2)))
-;; => [1 ([1 11 3] [5 0 1] [13 5 3] [6 4 1] [16 12 0])]
 
 (defn compare-all [target [id subsets]]
-  (if (->> subsets
-           (mapcat (partial v/sub target))           
-           (every? (complement neg?)))
+  (if (every? (complement neg?) (v/sub target subsets))
     id 0))
 
 (defn id-sums [target data]
@@ -41,13 +40,12 @@
 (def part-1 (id-sums [12 13 14] data))
 ;; => 1931
 
-(defn power [game]
-  (->> (second game)
-       (reduce v/emx)
-       (v/prod)))
-
 (defn powers-sum [data]
-  (->> data (map power) v/sum int))
+  (->> data
+       (map second)
+       (map v/prod)
+       (v/sum)
+       (int)))
 
 (def part-2 (powers-sum data))
 ;; => 83105
