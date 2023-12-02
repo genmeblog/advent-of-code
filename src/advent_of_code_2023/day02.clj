@@ -24,7 +24,7 @@
                           (reduce v/emx))]))
 
 (defn parse-data [data]
-  (map parse-line data))
+  (into {} (map parse-line data)))
 
 (def data (parse-data (read-data 2023 2)))
 
@@ -41,8 +41,7 @@
 ;; => 1931
 
 (defn powers-sum [data]
-  (->> data
-       (map second)
+  (->> (vals data)
        (map v/prod)
        (v/sum)
        (int)))
