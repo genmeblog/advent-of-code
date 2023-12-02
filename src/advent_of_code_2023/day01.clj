@@ -16,8 +16,7 @@
        (apply str)
        (parse-long)))
 
-(defn summarize
-  [data re]
+(defn summarize [data re]
   (->> data
        (map (partial parse-line re))
        (reduce +)))
