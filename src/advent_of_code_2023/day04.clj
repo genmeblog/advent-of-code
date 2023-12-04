@@ -33,8 +33,8 @@
                  (add-copies buff
                              (range id (+ (data id) id)) ;; which to update
                              (buff id))) ;; current state of a game, number of copies till now
-               (vec (repeat (count data) 1)) ;; init copies
-               (range (count data))) ;; process one by one
+               (-> data count (repeat 1) vec) ;; init copies
+               (-> data count range)) ;; process one by one
        (reduce +)))
 
 (def part-2 (copies data))
