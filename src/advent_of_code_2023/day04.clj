@@ -29,7 +29,7 @@
   (reduce (fn [b id] (update b (inc id) + copies)) buff rng))
 
 (defn copies [data]
-  (->> (reduce (fn [buff id]
+  (->> (reduce (fn [buff id]                 
                  (add-copies buff
                              (range id (+ (data id) id)) ;; which to update
                              (buff id))) ;; current state of a game, number of copies till now

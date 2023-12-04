@@ -23,7 +23,7 @@
 (defn parse-command
   [m command-string]
   (let [splitted (rest (re-find #"(\w+) (\d+),(\d+) through (\d+),(\d+)" command-string))]
-    (perform-operation (m (first splitted)) (map #(Long/valueOf ^String %) (rest splitted)))))
+    (perform-operation (m (first splitted)) (map parse-long (rest splitted)))))
 
 (def commands (read-data 2015 6))
 

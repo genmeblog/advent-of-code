@@ -1,7 +1,7 @@
 (ns advent-of-code-2015.day03
-  (:require [clojure.java.io :as io]))
+  (:require [common :refer [read-single-line]]))
 
-(def dimensions-data (slurp (io/resource "advent_of_code_2015/day03.txt")))
+(def dimensions-data (read-single-line 2015 3))
 
 (defn visited-houses
   [instr]
@@ -33,4 +33,3 @@
 
 (def part-2 (visited-with-robo dimensions-data))
 ;; => 2631
-

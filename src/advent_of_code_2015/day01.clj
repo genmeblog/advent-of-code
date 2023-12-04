@@ -1,18 +1,14 @@
 (ns advent-of-code-2015.day01
-  (:require [clojure.java.io :as io]))
+  (:require [common :refer [read-single-line]]))
 
 (defn convert [c] (case c \( 1 \) -1 0))
 
-(def data (->> "advent_of_code_2015/day01.txt"
-               (io/resource)
-               (slurp)
-               (map convert)))
+(def data (map convert (read-single-line 2015 1)))
 
 (def part-1 (reduce + data))
 ;; => 138
 
-(defn find-step
-  [data]
+(defn find-step [data]
   (->> (reductions + 0 data)
        (take-while (complement neg?))
        (count)))
