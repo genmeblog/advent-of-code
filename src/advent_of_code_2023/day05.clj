@@ -9,50 +9,40 @@
 
 (defn parse-block [[header & rules]]
   (let [[_ source target] (re-find #"^(\w+)\-to\-(\w+)" header)]
-    [source [target (map parse-rule rules)]]))
+    [source [target (sort (map parse-rule rules))]]))
 
 (defn parse-data [blocks]
-  {:seeds (->> (re-seq #"\d+" (ffirst blocks)) (map parse-long))
-   :rules (->> (map parse-block (rest blocks)) (into {}))})
+  [(->> (re-seq #"\d+" (ffirst blocks)) (map parse-long)) ;; seeds
+   (->> (map parse-block (rest blocks)) (into {}))]) ;; rules
 
 (def data (parse-data (read-data-as-blocks 2023 5)))
 
-(defn intersection-and-differences
-  [[a b :as i] [c d shift]]
-  (if (and (<= a d) (>= b c)) ;; overlap?
-    [(v/shift [(max a c) (min b d)] shift)
-     (cond
-       (and (> c a) (< d b)) [[a (dec c)] [(inc d) b]] ;; inside
-       (and (<= c a) (< d b)) [[(inc d) b]] ;; left
-       (and (>= d b) (> c a)) [[a (dec c)]])] ;; right
-    [nil [i]])) ;; non-overlapping
+(defn split-range-and-shift [[a b :as i] [c d shift]]
+  (cond
+    (and (< a c) (< d b)) [[a (dec c)] (v/shift [c d] shift) [(inc d) b]] ;; inside
+    (and (< a c) (<= c b) (<= b d)) [[a (dec c)] (v/shift [c b] shift)] ;; right overlap
+    (and (<= c a) (<= a d) (< d b)) [(v/shift [a d] shift) [(inc d) b]] ;; left overlap
+    (and (<= c a) (<= b d)) [(v/shift i shift)] ;; covering
+    :else [i])) ;; outside
 
-(defn pass-ranges-through-targets
-  [sources targets]
-  (->> targets
-       (reduce (fn [[moved seeds] target]
-                 (loop [moved moved
-                        seeds seeds
-                        leftovers []]
-                   (if-let [seed (first seeds)]
-                     (let [[p rst] (intersection-and-differences seed target)]
-                       (recur (if p (conj moved p) moved)
-                              (rest seeds)
-                              (concat leftovers rst)))
-                     [moved leftovers]))) [[] sources])
-       (apply concat)))
+(defn split-by-rules [rules rng]
+  (reduce (fn [[[_ b :as curr] & rst] [_ d :as t]]
+            (let [nres (apply conj rst (split-range-and-shift curr t))]
+              (if (>= d b) ;; other rules are outside our target (rules are sorted ascending)
+                (reduced nres)
+                nres))) (list rng) rules))
 
 (defn process-rule [rules [what ranges]]
   (if (= "location" what)
     (->> ranges flatten (apply min) int)
     (let [[target rules-list] (rules what)]
-      (recur rules [target (pass-ranges-through-targets ranges rules-list)]))))
+      (recur rules [target (mapcat (partial split-by-rules rules-list) ranges)]))))
 
 (defn seeds-ids [seeds] (map (partial repeat 2) seeds))
 (defn seeds-ranges [seeds] (map (fn [[a b]] [a (+ a b -1)])(partition 2 seeds)))
 
-(defn find-location [data seed-fn]
-  (process-rule (:rules data) ["seed" (seed-fn (:seeds data))]))
+(defn find-location [[seeds rules] seed-fn]
+  (process-rule rules ["seed" (seed-fn seeds)]))
 
 (def part-1 (find-location data seeds-ids))
 ;; => 806029445
