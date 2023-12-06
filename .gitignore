@@ -12,4 +12,6 @@ pom.xml.asc
 .hgignore
 .hg/
 .session
-
+.cache/
+.data.h2.key
+data/*

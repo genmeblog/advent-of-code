@@ -1,26 +1,56 @@
 (ns common
   (:require [clojure.java.io :as io]
             [clojure.string :as str])
-  (:import [org.h2.mvstore MVStore$Builder]))
+  (:import [org.h2.mvstore MVMap MVStore MVStore$Builder]))
 
-(defn- format-name
-  ([year day] (format-name year day ""))
-  ([year day suff]
-   (format (str "advent_of_code_" year "/day%02d%s.txt") day suff)))
+;; external kv-store 
+
+(defmacro with-kv-store
+  "H2 store encrypted with content of .data.h2.key file"
+  [m map-name & forms]
+  `(with-open [^MVStore store# (-> (MVStore$Builder.)
+                                   (.fileName "resources/data.h2")
+                                   (.encryptionKey (char-array (slurp ".data.h2.key")))
+                                   (.compress)
+                                   (.open))]
+     (let [^MVMap ~m (.openMap store# ~map-name)]
+       ~@forms)))
+
+(defn sget
+  ([k] (sget "inputs" k))
+  ([map-name k] (with-kv-store m map-name (.get m k))))
+
+(defn sset
+  ([k v] (sset "inputs" k v))
+  ([map-name k v] (with-kv-store m map-name (.put m k v))))
+
+(defn add-all-data
+  "Store all files from data/map-name as k=yyyydd and file content under"
+  ([] (add-all-data "inputs"))
+  ([map-name]
+   (with-kv-store m map-name
+     (doseq [file (rest (file-seq (io/file (str "data/" map-name))))]
+       (.put m (->> file str (re-seq #"\d+") first) (slurp file))))))
+
+;;
+
+(defn format-name ([year day] (format (str year "%02d") day)))
 
 (defn read-single-line
-  [& args]
-  (-> (apply format-name args)
-      (io/resource)
-      (slurp)
-      (str/trim)))
+  ([year day] (read-single-line "inputs" year day))
+  ([map-name year day]
+   (->> (format-name year day)
+        (sget map-name)
+        (str/trim))))
 
 (defn read-data
-  [& args]
-  (-> (apply format-name args)
-      (io/resource)
-      (io/reader)
-      (line-seq)))
+  ([year day] (read-data "inputs" year day))
+  ([map-name year day]
+   (->> (format-name year day)
+        (sget map-name)
+        (char-array)
+        (io/reader)
+        (line-seq))))
 
 (defn str-as-blocks
   ([s] (str-as-blocks s true))
@@ -30,18 +60,17 @@
                           (if trim? (map str/trim sb) sb)))))))
 
 (defn read-data-as-blocks
-  [& args]
-  (-> (apply format-name args)
-      (io/resource)
-      (slurp)
-      (str-as-blocks)))
+  ([year day] (read-data-as-blocks "inputs" year day))
+  ([map-name year day]
+   (->> (format-name year day)
+        (sget map-name)
+        (str-as-blocks))))
 
 (defn read-data-as-blocks-no-trim
-  [& args]
-  (-> (apply format-name args)
-      (io/resource)
-      (slurp)
-      (str-as-blocks false)))
+  ([year day] (read-data-as-blocks-no-trim "inputs" year day))
+  ([map-name year day]
+   (str-as-blocks (->> (format-name year day)
+                       (sget map-name)) false)))
 
 (defn parse
   ([s] (mapv read-string s))
@@ -80,13 +109,7 @@
 
 ;;
 
-(defn store-dataset [year day]
-  (with-open [store (-> (MVStore$Builder.)
-                        (.fileName "resources/data.h2")
-                        (.encryptionKey (char-array (slurp ".data.h2.key")))
-                        (.compress)
-                        (.open))]
-    (let [m (.openMap store "data")]
-      (.put m (str year day) (read-single-line year day)))))
+(comment
+  (add-all-data))
 
 
