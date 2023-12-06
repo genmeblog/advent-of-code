@@ -34,19 +34,21 @@
 
 ;;
 
-(defn format-name ([year day] (format (str year "%02d") day)))
+(defn format-name ([year day suff] (format (str year "%02d" suff) day)))
 
 (defn read-single-line
   ([year day] (read-single-line "inputs" year day))
-  ([map-name year day]
-   (->> (format-name year day)
+  ([map-name year day] (read-single-line map-name year day ""))
+  ([map-name year day suff]
+   (->> (format-name year day suff)
         (sget map-name)
         (str/trim))))
 
 (defn read-data
   ([year day] (read-data "inputs" year day))
-  ([map-name year day]
-   (->> (format-name year day)
+  ([map-name year day] (read-data map-name year day ""))
+  ([map-name year day suff]
+   (->> (format-name year day suff)
         (sget map-name)
         (char-array)
         (io/reader)
@@ -61,15 +63,17 @@
 
 (defn read-data-as-blocks
   ([year day] (read-data-as-blocks "inputs" year day))
-  ([map-name year day]
-   (->> (format-name year day)
+  ([map-name year day] (read-data-as-blocks map-name year day ""))
+  ([map-name year day suff]
+   (->> (format-name year day suff)
         (sget map-name)
         (str-as-blocks))))
 
 (defn read-data-as-blocks-no-trim
   ([year day] (read-data-as-blocks-no-trim "inputs" year day))
-  ([map-name year day]
-   (str-as-blocks (->> (format-name year day)
+  ([map-name year day] (read-data-as-blocks-no-trim map-name year day ""))
+  ([map-name year day suff]
+   (str-as-blocks (->> (format-name year day suff)
                        (sget map-name)) false)))
 
 (defn parse
@@ -110,6 +114,8 @@
 ;;
 
 (comment
-  (add-all-data))
+  (do
+    (add-all-data)
+    (add-all-data "examples")))
 
 

@@ -3,8 +3,9 @@
             [fastmath.core :as m]
             [common :refer [read-data]]))
 
-(def data (->> (read-data 2023 6)
-             (map (partial re-seq #"\d+"))))
+(defn parse-data [data] (map (partial re-seq #"\d+") data))
+
+(def data (parse-data (read-data 2023 6)))
 
 (defn solve-pair [[time distance]]
   (->> (solve/quadratic -1 time (- (m/next-double distance)))
