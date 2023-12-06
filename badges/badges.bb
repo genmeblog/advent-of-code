@@ -24,7 +24,8 @@
   "Return a string representing number of stars earned for a given `year`"
   [year]
   (let [parsed (-> (str "https://adventofcode.com/" year)
-                   (curl/get {:headers {"Cookie" (str "session=" cookie)}})
+                   (curl/get {:headers {"Cookie" (str "session=" cookie)
+                                        "User-Agent" "GenerateMe https://github.com/genmeblog/advent-of-code generateme.blog@gmail.com"}})
                    :body
                    (convert-to :hickory))]
     (-> (s/select (s/class "star-count") parsed)
