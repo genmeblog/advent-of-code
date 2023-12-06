@@ -5,4 +5,6 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.12.0-alpha5"]
                  [clojure2d "1.4.6-SNAPSHOT"]
+                 [org.clojure/data.json "2.4.0"]
+                 [com.h2database/h2 "2.2.224"]
                  [io.github.nextjournal/clerk "0.15.957"]])

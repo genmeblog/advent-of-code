@@ -1,6 +1,7 @@
 (ns common
   (:require [clojure.java.io :as io]
-            [clojure.string :as str]))
+            [clojure.string :as str])
+  (:import [org.h2.mvstore MVStore$Builder]))
 
 (defn- format-name
   ([year day] (format-name year day ""))
@@ -76,3 +77,16 @@
 (defn bfs->path-count
   [around-fn start end]
   (count (bfs->path around-fn start end)))
+
+;;
+
+(defn store-dataset [year day]
+  (with-open [store (-> (MVStore$Builder.)
+                        (.fileName "resources/data.h2")
+                        (.encryptionKey (char-array (slurp ".data.h2.key")))
+                        (.compress)
+                        (.open))]
+    (let [m (.openMap store "data")]
+      (.put m (str year day) (read-single-line year day)))))
+
+
