@@ -4,7 +4,7 @@
 
 (def types {[1 1 1 1 1] 0 [1 1 1 2] 1 [1 2 2] 2 [1 1 3] 3 [2 3] 4 [1 4] 5 [5] 6})
 
-;; convert cards to hex numbers
+;; encode as hex
 (def escapes-part1 {\A \E \K \D \Q \C \J \B \T \A})
 (def escapes-part2 {\A \E \K \D \Q \C \J \1 \T \A})
 
@@ -18,21 +18,14 @@
 (defn parse-line [escape-map scoring l]
   (let [[cards score] (str/split l #"\s+")
         ncards (str/escape cards escape-map)]
-    [ncards (scoring ncards) (parse-long score)]))
-
-(defn compare-cards [[c1 t1] [c2 t2]]
-  (let [step1 (compare t1 t2)]
-    (if-not (zero? step1)
-      step1
-      (compare (Integer/parseInt c1 16)
-               (Integer/parseInt c2 16)))))
+    [(scoring ncards) ncards (parse-long score)]))
 
 (def data (read-data 2023 7))
 
 (defn score-game [data escape-map scoring]
   (->> data
        (map (partial parse-line escape-map scoring))
-       (sort compare-cards)
+       (sort)
        (map-indexed (fn [id c] (* (inc id) (last c))))
        (reduce +)))
 
