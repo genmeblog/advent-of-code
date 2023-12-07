@@ -29,8 +29,10 @@
   ([] (add-all-data "inputs"))
   ([map-name]
    (with-kv-store m map-name
-     (doseq [file (rest (file-seq (io/file (str "data/" map-name))))]
-       (.put m (->> file str (re-seq #"\d+") first) (slurp file))))))
+     (doseq [file (rest (file-seq (io/file (str "data/" map-name))))
+             :let [k (->> file str (re-seq #"\d+") first)]]
+       (when-not (.containsKey m k)
+         (.put m k (slurp file)))))))
 
 ;;
 
