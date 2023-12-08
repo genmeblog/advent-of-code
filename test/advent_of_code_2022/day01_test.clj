@@ -1,22 +1,9 @@
 (ns advent-of-code-2022.day01-test
   (:require [advent-of-code-2022.day01 :as sut]
             [clojure.test :as t]
-            [common :refer [str-as-blocks]]))
+            [common :refer [read-data-as-blocks]]))
 
-(def data (sut/parse (str-as-blocks "1000
-2000
-3000
-
-4000
-
-5000
-6000
-
-7000
-8000
-9000
-
-10000")))
+(def data (sut/parse (read-data-as-blocks "examples" 2022 1)))
 
 (t/deftest dummy-data
   (t/is (= 24000 (reduce max data)))

@@ -24,7 +24,7 @@
 
 (defn part-2-calc [data]
   (reduce (fn [sum [a b]]
-            (+ sum (* 3 (dec b)) ((reversed b) a))) 0 data))
+            (+ sum (* 3 (dec b)) (get-in reversed [b a]))) 0 data))
 
 (def part-2 (part-2-calc data))
 ;; => 9975
