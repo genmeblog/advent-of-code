@@ -62,23 +62,32 @@
 (def part-1 (farthest-point data))
 ;; => 6682
 
+;; |, F...J, L...7 - always toggle
+(defn change-state [[inside? cnt ctx :as curr] border? ch]
+  (cond
+    (not border?)
+    [inside? (if inside? (inc cnt) cnt) ctx]
+
+    (#{\F \L} ch)
+    [inside? cnt ch]
+
+    (or (= \| ch) (#{[\F \J] [\L \7]} [ctx ch]))
+    [(not inside?) cnt ctx]
+
+    :else curr))
+
+(defn search-line [b spos spipe row l]
+  (->> (map-indexed vector l)
+       (reduce (fn [curr [col ch]]
+                 (let [pos [row col]]
+                   (change-state curr (b pos) (if (= pos spos) spipe ch))))
+               [false 0 nil])))
+
+;; scan line by line and toggle inside/outside information
 (defn find-interior [data]
   (let [[b [spos _ spipe]] (build-loop data)]
     (->> data
-         (map-indexed (fn [row l]
-                        (->> (map-indexed vector l)
-                             (reduce (fn [[inside? cnt ctx :as curr] [col ch]]
-                                       (let [pos [row col]
-                                             ch (if (= pos spos) spipe ch)]
-                                         (cond
-                                           (not (b pos)) [inside? (if inside? (inc cnt) cnt) ctx]
-                                           (#{\F \L} ch) [inside? cnt ch]
-                                           (or (and (= ch \7) (= ctx \F))
-                                               (and (= ch \J) (= ctx \L))) [inside? cnt nil]
-                                           (or (= ch \|)
-                                               (and (= ch \7) (= ctx \L))
-                                               (and (= ch \J) (= ctx \F))) [(not inside?) cnt nil]
-                                           :else curr))) [false 0 nil]))))
+         (map-indexed (partial search-line b spos spipe))
          (map second)
          (reduce +))))
 
