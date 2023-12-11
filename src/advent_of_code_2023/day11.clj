@@ -2,9 +2,7 @@
   (:require [common :refer [read-data]]))
 
 (defn find-empty [lines]
-  (->> (map-indexed vector lines)
-       (reduce (fn [b [id l]]
-                 (if (every? #{\.} l) (conj b id) b)) [])))
+  (keep-indexed (fn [id l] (when (every? #{\.} l) id)) lines))
 
 (defn galaxies [data]
   (for [r (range (count data))
