@@ -18,7 +18,7 @@
 (def data (parse-data (vec (read-data 2023 11))))
 
 (defn count-extra-empty [a b e]
-  (count (filter #(or (< a % b) (> a % b)) e)))
+  (count (filter (fn [v] (or (< a v b) (> a v b))) e)))
 
 (defn distance [t er ec [r1 c1] [r2 c2]]
   (+ (abs (- r1 r2))
