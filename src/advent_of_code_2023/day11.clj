@@ -37,3 +37,4 @@
 
 (def part-2 (distances data 999999))
 ;; => 630728425490
+
