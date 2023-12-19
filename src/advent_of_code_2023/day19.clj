@@ -18,16 +18,16 @@
 (def data (parse (read-data-as-blocks 2023 19)))
 
 (defn accepted-part?
-  ([conds part] (accepted-part? conds part 'in))
+  ([conds part] (accepted-part? conds part (conds 'in)))
   ([conds part rule]
    (if (#{'R 'A} rule)
      (= 'A rule)
-     (loop [[[cat cnd v nxt] & r] (conds rule)]
+     (let [[[cat cnd v nxt] & r] rule]
        (if-let [cndf ({'> > '< <} cnd)]
          (if-not (cndf (part cat) v)
-           (recur r)
-           (accepted-part? conds part nxt))
-         (accepted-part? conds part cat))))))
+           (recur conds part r)
+           (recur conds part (conds nxt)))
+         (recur conds part (conds cat)))))))
 
 (defn find-accepted [{:keys [conds parts]}]
   (->> (filter (partial accepted-part? conds) parts)
