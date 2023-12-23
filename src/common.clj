@@ -115,6 +115,43 @@
 
 ;;
 
+(defn- maybe-remove [m k]
+  (if-not (seq (m k)) (dissoc m k) m))
+
+(deftype PriorityQueue [priorities index]
+  clojure.lang.IPersistentStack
+  (peek [_] (first (second (first priorities))))
+  (pop [_] (let [[k vs] (first priorities)
+                 v (first vs)]
+             (PriorityQueue. (-> priorities
+                                 (update k disj v)
+                                 (maybe-remove k))
+                             (dissoc index v))))
+  clojure.lang.Seqable
+  (seq [_] (keys index))
+  clojure.lang.IPersistentSet
+  (contains [_ k] (contains? index k))
+  clojure.lang.IFn
+  (invoke [_ k] (index k)))
+
+(defn set-priority
+  ([pq [value priority]] (set-priority pq value priority))
+  ([^PriorityQueue pq value priority]
+   (PriorityQueue. (if-let [old-priority ((.index pq) value)]
+                     (-> (.priorities pq)
+                         (update old-priority disj value)
+                         (maybe-remove old-priority)
+                         (update priority (comp set conj) value))
+                     (-> (.priorities pq)
+                         (update priority (comp set conj) value)))
+                   (assoc (.index pq) value priority))))
+
+(defn priority [^PriorityQueue pq value] ((.index pq) value))
+
+(defn ->priority-queue
+  ([] (PriorityQueue. (sorted-map) {}))
+  ([priorities] (reduce set-priority (->priority-queue) priorities)))
+
 (comment
   (do
     (add-all-data)
