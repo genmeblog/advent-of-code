@@ -28,7 +28,7 @@
        (visited state)
        (let [curr-cost (priority Q state)
              [nQ nvisited] (reduce (fn [[q v :as qv] [[nx ny :as npos] :as n]]
-                                     (if (or (visited n) (neg? nx) (neg? ny) (> nx ex) (> ny ey))
+                                     (if (or (v n) (neg? nx) (neg? ny) (> nx ex) (> ny ey))
                                        qv
                                        (let [new-cost (+ curr-cost (get-in data npos))]
                                          [(set-priority q n new-cost)
