@@ -9,10 +9,11 @@
 ![2021](./badges/img/2021.svg)
 ![2022](./badges/img/2022.svg)
 ![2023](./badges/img/2023.svg)
+![2024](./badges/img/2023.svg)
 
 ## License
 
-Copyright © 2020-2021 GenerateMe
+Copyright © 2020-2024 GenerateMe
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
