@@ -1,0 +1,121 @@
+digraph {
+
+node [style=filled]
+jf [fillcolor=red]
+fd [fillcolor=red]
+mb [fillcolor=red]
+mr [fillcolor=blue]
+qd [fillcolor=red]
+rs [fillcolor=red]
+xl [fillcolor=red]
+zl [fillcolor=red]
+tj [fillcolor=red]
+fn [fillcolor=red]
+qc [fillcolor=red]
+fh [fillcolor=red]
+kk [fillcolor=blue]
+qn [fillcolor=red]
+hm [fillcolor=red]
+cm [fillcolor=red]
+jj [fillcolor=red]
+dr [fillcolor=red]
+fq [fillcolor=red]
+hd [fillcolor=red]
+qt [fillcolor=blue]
+vj [fillcolor=blue]
+tt [fillcolor=red]
+sf [fillcolor=red]
+rg [fillcolor=red]
+zk [fillcolor=red]
+lp [fillcolor=red]
+xf [fillcolor=red]
+cr [fillcolor=blue]
+nb [fillcolor=red]
+dg [fillcolor=red]
+ql [fillcolor=red]
+gl [fillcolor=blue]
+nl [fillcolor=blue]
+ff [fillcolor=red]
+rb [fillcolor=red]
+lc [fillcolor=red]
+vm [fillcolor=red]
+tf [fillcolor=red]
+hr [fillcolor=red]
+kf [fillcolor=red]
+bb [fillcolor=blue]
+ml [fillcolor=red]
+bq [fillcolor=red]
+db [fillcolor=red]
+hn [fillcolor=red]
+dn [fillcolor=red]
+gm [fillcolor=red]
+gq [fillcolor=red]
+hh [fillcolor=red]
+bd [fillcolor=red]
+xx [fillcolor=red]
+qs [fillcolor=red]
+jx [fillcolor=blue]
+cz [fillcolor=red]
+bn [fillcolor=red]
+hk [fillcolor=red]
+
+jf -> { cr dn } 
+fd -> { hm jx }
+mb -> { bq cr }
+mr -> { qt }
+qd -> { cr dg }
+rs -> { hh }
+xl -> { gq vj }
+zl -> { qn }
+tj -> { cr qd }
+fn -> { hn }
+qc -> { tf }
+fh -> { jj vj }
+kk -> { qt }
+qn -> { jx fn }
+hm -> { jx fq }
+cm -> { vj fh }
+jj -> { vj lp }
+dr -> { vj qc }
+broadcaster -> { db hd cm xf }
+fq -> { jx zk }
+hd -> { jx zl }
+qt -> { rx }
+vj -> { bb qc cm }
+tt -> { bd }
+sf -> { jx }
+rg -> { nl hr }
+zk -> { jx sf }
+lp -> { cz vj }
+xf -> { mb cr }
+cr -> { dg bq kk xf gm }
+nb -> { vj dr }
+dg -> { vm }
+ql -> { nl }
+gl -> { qt }
+nl -> { db hr mr hh hk rs bn }
+ff -> { ql nl }
+rb -> { cr }
+lc -> { vj }
+vm -> { gm cr }
+tf -> { vj xl }
+hr -> { kf }
+kf -> { xx nl }
+bb -> { qt }
+ml -> { nl bn }
+bq -> { tj }
+db -> { ml nl }
+hn -> { jx tt }
+dn -> { cr rb }
+gm -> { qs }
+gq -> { lc vj }
+hh -> { rg }
+bd -> { fd }
+xx -> { nl ff }
+qs -> { jf cr }
+jx -> { fn bd tt gl zl hd }
+cz -> { nb vj }
+bn -> { hk }
+hk -> { rs }
+
+}

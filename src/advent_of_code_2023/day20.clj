@@ -78,4 +78,7 @@
 ;; => 243037165713371
 
 ;; graphviz
-;;   dot -Tpng resources/202320.dot > graph.png
+;;   dot -Tpng resources/202320.dot > images/advent_of_code_2023/day20.png
+
+(-> "good morning" set sort)
+;; => (\space \d \g \i \m \n \o \r)
