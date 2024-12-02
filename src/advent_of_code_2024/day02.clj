@@ -31,7 +31,6 @@
 (defn safe-subreports? [report]
   (->> (range (count report))
        (map (partial remove-item report))
-       (cons report)
        (safe-data)
        (pos?)))
 
