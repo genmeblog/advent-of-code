@@ -7,7 +7,7 @@
   (re-seq #"mul\((\d{1,3}),(\d{1,3})\)" data))
 
 (defn multiply [[_ a b]]
-  (* (parse-long (or a "0")) (parse-long (or b "0"))))
+  (* (parse-long a) (parse-long b)))
 
 (defn multiply-and-add [data]
   (transduce (map multiply) + data))
@@ -16,7 +16,7 @@
 ;; => 188741603
 
 (defn filter-step [[buff in?] [v :as all]]
-  [(if in? (conj buff all) buff)
+  [(if (and in? (= \m (first v))) (conj buff all) buff)
    (case v "do()" true "don't()" false in?)])
 
 (defn find-surrounded [data]
