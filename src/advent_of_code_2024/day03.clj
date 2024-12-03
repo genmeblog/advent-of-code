@@ -17,7 +17,7 @@
 
 (defn filter-step [[buff in?] [v :as all]]
   [(if in? (conj buff all) buff)
-   (condp = v "do()" true "don't()" false in?)])
+   (case v "do()" true "don't()" false in?)])
 
 (defn find-surrounded [data]
   (->> data
