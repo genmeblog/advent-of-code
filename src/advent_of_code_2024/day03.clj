@@ -6,9 +6,11 @@
 (defn find-all [data]
   (re-seq #"mul\((\d{1,3}),(\d{1,3})\)" data))
 
-(defn multiply [[_ a b]] (* (parse-long (or a "0")) (parse-long (or b "0"))))
+(defn multiply [[_ a b]]
+  (* (parse-long (or a "0")) (parse-long (or b "0"))))
 
-(defn multiply-and-add [data] (transduce (map multiply) + data))
+(defn multiply-and-add [data]
+  (transduce (map multiply) + data))
 
 (def part-1 (multiply-and-add (find-all data)))
 ;; => 188741603
