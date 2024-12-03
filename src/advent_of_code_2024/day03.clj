@@ -10,7 +10,6 @@
 
 (defn multiply-and-add [data] (transduce (map multiply) + data))
 
-
 (def part-1 (multiply-and-add (find-all data)))
 ;; => 188741603
 
