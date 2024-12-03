@@ -8,10 +8,8 @@
 
 (defn multiply [[_ a b]] (* (parse-long (or a "0")) (parse-long (or b "0"))))
 
-(defn multiply-and-add [data]
-  (->> data
-       (map multiply)
-       (reduce +)))
+(defn multiply-and-add [data] (transduce (map multiply) + data))
+
 
 (def part-1 (multiply-and-add (find-all data)))
 ;; => 188741603
