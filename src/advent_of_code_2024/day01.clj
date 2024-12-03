@@ -24,9 +24,7 @@
 (defn similarity
   [[left right]]
   (let [freqs (frequencies right)]
-    (->> left
-         (map (fn [v] (* v (freqs v 0))))
-         (reduce +))))
+    (transduce (map (fn [v] (* v (freqs v 0)))) + left)))
 
 (def part-2 (similarity data))
 ;; => 20520794
