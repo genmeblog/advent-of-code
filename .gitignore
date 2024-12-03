@@ -15,3 +15,5 @@ pom.xml.asc
 .cache/
 .data.h2.key
 data/*
+/docs
+playground.clj
