@@ -4,13 +4,14 @@
 (def data (mapv vec (read-data 2024 04)))
 
 (defn add [[x y] [a b]] [(+ x a) (+ y b)])
+(defn ->patterns [strs] (set (map vec strs)))
 
 (def xmas-offsets [[[0 0] [1 0] [2 0] [3 0]]
                  [[0 0] [0 1] [0 2] [0 3]]
                  [[0 0] [1 1] [2 2] [3 3]]
-                 [[0 0] [1 -1] [2 -2] [3 -3]]])
+                 [[0 3] [1 2] [2 1] [3 0]]])
 
-(def xmas-patterns (set (map seq ["XMAS" "SAMX"])))
+(def xmas-patterns (->patterns ["XMAS" "SAMX"]))
 
 (defn with-offsets
   [data xy offs]
@@ -29,7 +30,7 @@
 ;; => 2642
 
 (def x-mas-offsets [[[0 0] [0 2] [1 1] [2 0] [2 2]]])
-(def x-mas-patterns (set (map seq ["SSAMM" "MMASS" "MSAMS" "SMASM"])))
+(def x-mas-patterns (->patterns ["SSAMM" "MMASS" "MSAMS" "SMASM"]))
 
 (def part-2 (count-patterns data x-mas-offsets x-mas-patterns))
 ;; => 1974
