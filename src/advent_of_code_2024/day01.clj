@@ -1,13 +1,10 @@
 (ns advent-of-code-2024.day01
-  (:require [common :refer [read-data]]))
-
-(defn parse-line [l]
-  (map parse-long (re-seq #"\d+" l)))
+  (:require [common :refer [read-data get-numbers]]))
 
 (defn build-lists
   [data]
   (->> data
-       (map parse-line)
+       (map get-numbers)
        (apply map vector)
        (map sort)))
 

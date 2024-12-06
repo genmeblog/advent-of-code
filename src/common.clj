@@ -152,6 +152,14 @@
   ([] (PriorityQueue. (sorted-map) {}))
   ([priorities] (reduce set-priority (->priority-queue) priorities)))
 
+;;
+
+(defn get-numbers [data]
+  (mapv parse-long (re-seq #"\d+" data)))
+
+;;
+
+
 (comment
   (do
     (add-all-data)

@@ -1,9 +1,7 @@
 (ns advent-of-code-2024.day02
-  (:require [common :refer [read-data]]))
+  (:require [common :refer [read-data get-numbers]]))
 
-(defn parse-line [line] (mapv parse-long (re-seq #"\d+" line)))
-
-(def data (map parse-line (read-data 2024 02)))
+(def data (map get-numbers (read-data 2024 02)))
 
 (defn diffs [report]
   (->> report
