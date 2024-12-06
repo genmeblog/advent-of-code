@@ -8,11 +8,9 @@
                (positives [x y]) -1
                :else 1))))
 
-(defn middle [l] (l (int (/ (count l) 2))))
-
 (defn validate-and-middle [comparator l]
   (let [l2 (vec (sort comparator l))]
-    [(= l l2) (middle l2)]))
+    [(= l l2) (l2 (quot (count l) 2))]))
 
 (defn sort-lists [comparator lists]
   (->> lists
