@@ -3,10 +3,7 @@
 
 (defn ->comparator [pairs]
   (let [positives (set (map get-numbers pairs))]
-    (fn [x y] (cond
-               (== x y) 0
-               (positives [x y]) -1
-               :else 1))))
+    (fn [x y] (if (positives [x y]) -1 1))))
 
 (defn validate-and-middle [comparator l]
   (let [l2 (vec (sort comparator l))]
