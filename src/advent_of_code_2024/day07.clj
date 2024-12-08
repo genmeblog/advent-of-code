@@ -3,14 +3,12 @@
 
 (def data (map get-numbers (read-data 2024 07)))
 
-(defn apply-ops [ops ^long a ^long b] (map #(% a b) ops))
-
 (defn calculate
   ([ops [t v & r]] (calculate ops t [v] r))
   ([ops ^long t curr [v & rst]]
    (if-not v
      (if (some (fn [^long c] (== t c)) curr) t 0)
-     (recur ops t (->> (mapcat (fn [^long c] (apply-ops ops c v)) curr)
+     (recur ops t (->> (mapcat (fn [^long c] (map #(% c v) ops)) curr)
                        (remove (fn [^long c] (> c t)))) rst))))
 
 (defn answer [ops data]
