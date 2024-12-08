@@ -3,44 +3,23 @@
 
 (def data (map get-numbers (read-data 2024 07)))
 
-(defmacro ->gen-combinations [nm init]
-  `(def ~nm (memoize (fn [^long length#]
-                     (if (== 1 length#)
-                       [~@(map vector init)]
-                       (mapcat (fn [~'l] [~@(for [op init] `(conj ~'l ~op))]) (~nm (dec length#))))))))
-
-(->gen-combinations combinations2 [* +])
-
-;;;;; inline combinations and cut wrong branches
+(defn apply-ops [ops ^long a ^long b] (map #(% a b) ops))
 
 (defn calculate
-  ^long [^long t ^long v r combination]
-  (->> (map vector r combination)
-       (reduce (fn [^long v1 [^long v2 op]]
-                 (let [res (long (op v1 v2))]
-                   (if (> res t) (reduced 0) res))) v)))
+  ([ops [t v & r]] (calculate ops t [v] r))
+  ([ops ^long t curr [v & rst]]
+   (if-not v
+     (if (some (fn [^long c] (== t c)) curr) t 0)
+     (recur ops t (->> (mapcat (fn [^long c] (apply-ops ops c v)) curr)
+                       (remove (fn [^long c] (> c t)))) rst))))
 
-(defn check-line
-  [comb-fn [^long t ^long f & r]]
-  (if (->> (comb-fn (count r))
-           (some (fn [combination] (== t (calculate t f r combination)))))
-    t 0))
+(defn answer [ops data]
+  (reduce + (pmap (partial calculate ops) data)))
 
-(defn answer [comb-fn data]
-  (->> data
-       (pmap (partial check-line comb-fn))
-       (reduce +)))
-
-(def part-1 (answer combinations2 data))
+(def part-1 (answer [* +] data))
 ;; => 850435817339
 
-(defn || ^long [^long a ^long b]
-  (cond
-    (< b 10) (+ (* a 10) b)
-    (< b 100) (+ (* a 100) b)
-    (< b 1000) (+ (* a 1000) b)))
+(defn || [a b] (parse-long (str a b)))  
 
-(->gen-combinations combinations3 [* + ||])
-
-(defonce part-2 (time (answer combinations3 data)))
+(def part-2 (answer [* + ||] data))
 ;; => 104824810233437

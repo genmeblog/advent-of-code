@@ -1,7 +1,7 @@
 (ns advent-of-code-2024.day08
   (:require [common :refer [read-data addv subv inside?]]))
 
-(defn pairs [ps]  (for [p1 ps p2 ps :when (not= p1 p2)] [p1 p2]))
+(defn pairs [ps] (for [p1 ps p2 ps :when (not= p1 p2)] [p1 p2]))
 
 (defn positions [data]
   {:size (count data)
