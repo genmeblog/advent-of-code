@@ -11,15 +11,19 @@
 
 (->gen-combinations combinations2 [* +])
 
+;;;;; inline combinations and cut wrong branches
+
 (defn calculate
-  ^long [^long v r combination]
+  ^long [^long t ^long v r combination]
   (->> (map vector r combination)
-       (reduce (fn [^long v1 [^long v2 op]] (op v1 v2)) v)))
+       (reduce (fn [^long v1 [^long v2 op]]
+                 (let [res (long (op v1 v2))]
+                   (if (> res t) (reduced 0) res))) v)))
 
 (defn check-line
   [comb-fn [^long t ^long f & r]]
   (if (->> (comb-fn (count r))
-           (some (fn [combination] (== t (calculate f r combination)))))
+           (some (fn [combination] (== t (calculate t f r combination)))))
     t 0))
 
 (defn answer [comb-fn data]
@@ -38,5 +42,5 @@
 
 (->gen-combinations combinations3 [* + ||])
 
-(defonce part-2 (answer combinations3 data))
+(defonce part-2 (time (answer combinations3 data)))
 ;; => 104824810233437

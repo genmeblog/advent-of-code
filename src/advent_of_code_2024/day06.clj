@@ -1,5 +1,5 @@
 (ns advent-of-code-2024.day06
-  (:require [common :refer [read-data]]
+  (:require [common :refer [read-data addv outside?]]
             [clojure.string :as str]))
 
 (defn find-start [data]
@@ -16,22 +16,20 @@
 (def data (parse-data (read-data 2024 06)))
 
 (defn rotate-right [[^long x ^long y]] [y (- x)])
-(defn add [[^long x ^long y] [^long a ^long b]] [(+ x a) (+ y b)])
 
 (defn step [m [pos dir]]
-  (let [npos (add pos dir)]
+  (let [npos (addv pos dir)]
     (if (= \# (get-in m npos))
       [pos (rotate-right dir)]
       [npos dir])))
 
 (defn traverse-map [{:keys [^long size start] :as data}]
-  (let [outside? (fn [[^long x ^long y]] (not (and (< -1 x size) (< -1 y size))))
-        start-pos-dir [start [-1 0]]]
+  (let [start-pos-dir [start [-1 0]]]
     (->> (iterate (partial step (:map data)) start-pos-dir)
          (reduce (fn [buff pos-dir]
                    (cond
                      (buff pos-dir) (reduced :loop)
-                     (outside? (first pos-dir)) (reduced buff)
+                     (outside? size (first pos-dir)) (reduced buff)
                      :else (conj buff pos-dir))) #{}))))
 
 (defn visited [data]

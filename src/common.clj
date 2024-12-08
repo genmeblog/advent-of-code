@@ -157,8 +157,12 @@
 (defn get-numbers [data]
   (mapv parse-long (re-seq #"\d+" data)))
 
-;;
+(defn subv [[^long x1 ^long y1] [^long x2 ^long y2]] [(- x1 x2) (- y1 y2)])
+(defn addv [[^long x1 ^long y1] [^long x2 ^long y2]] [(+ x1 x2) (+ y1 y2)])
+(defn inside? [^long size [^long x ^long y]] (and (< -1 x size) (< -1 y size)))
+(defn outside? [^long size pos] (not (inside? size pos)))
 
+;;
 
 (comment
   (do
