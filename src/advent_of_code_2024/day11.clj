@@ -18,11 +18,11 @@
    (if (== max-level level)
      [buff (count data)]
      (reduce (fn [[b ^long sum] stone]
-               (let [id [stone (- max-level level)]]
-                 (if-let [s (get-in buff id)]
+               (let [id [stone level]]
+                 (if-let [s (buff id)]
                    [b (+ sum s)]
                    (let [[nb s] (stones (transform stone) max-level (inc level) b)]
-                     [(assoc-in nb id s) (+ sum s)])))) [buff 0] data))))
+                     [(assoc nb id s) (+ sum s)])))) [buff 0] data))))
 
 (def part-1 (second (stones data 25)))
 ;; => 207683
