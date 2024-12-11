@@ -48,8 +48,6 @@
                         (let [surr (surroundings data ncurr (first p))]
                           (map (partial conj p) surr))) poss))))))
 
-(build-paths data [0 9])
-
 (defn draw-map [data]
   (let [zeros (find-id data 0)]
     (c2d/with-canvas [c (c2d/canvas 800 800 :highest)]
