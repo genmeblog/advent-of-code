@@ -3,30 +3,25 @@
 
 (def data (get-numbers (read-single-line 2024 11)))
 
-(defn transform [^long n]
-  (if (zero? n) [1]
-      (let [s (str n) c (count s)]
-        (if (even? c)
-          (let [hc (quot c 2)]
-            [(parse-long (subs s 0 hc))
-             (parse-long (subs s hc))])
-          [(* n 2024)]))))
+(def transform
+  (memoize (fn ^long [^long level ^long n ]
+             (cond
+               (zero? level) 1
+               (zero? n) (transform (dec level) 1)
+               :else (let [s (str n) c (count s)]
+                       (if (even? c)
+                         (let [hc (quot c 2)]
+                           (+ (transform (dec level) (parse-long (subs s 0 hc)))
+                              (transform (dec level) (parse-long (subs s hc)))))
+                         (transform (dec level) (* n 2024))))))))
 
-(defn stones
-  ([data ^long max-level] (stones data max-level 0 {}))
-  ([data ^long max-level ^long level buff]
-   (if (== max-level level)
-     [buff (count data)]
-     (reduce (fn [[b ^long sum] stone]
-               (let [id [stone level]]
-                 (if-let [s (buff id)]
-                   [b (+ sum s)]
-                   (let [[nb s] (stones (transform stone) max-level (inc level) b)]
-                     [(assoc nb id s) (+ sum s)])))) [buff 0] data))))
 
-(def part-1 (second (stones data 25)))
+(defn stones [data blinks]
+  (transduce (map (partial transform blinks)) + data))
+
+(def part-1 (stones data 25))
 ;; => 207683
 
-(def part-2 (second (stones data 75)))
+(def part-2 (stones data 75))
 ;; => 244782991106220
 

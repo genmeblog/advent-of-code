@@ -31,6 +31,7 @@
    (with-kv-store m map-name
      (doseq [file (rest (file-seq (io/file (str "data/" map-name))))
              :let [k (->> file str (re-seq #"\d+") first)]]
+       #_(.put m k (slurp file))
        (when-not (.containsKey m k)
          (.put m k (slurp file)))))))
 
@@ -157,10 +158,16 @@
 (defn get-numbers [data]
   (mapv parse-long (re-seq #"\d+" data)))
 
+(defn sum [xs] (reduce + 0 xs))
+(defn prod [xs] (reduce * 1 xs))
+
 (defn subv [[^long x1 ^long y1] [^long x2 ^long y2]] [(- x1 x2) (- y1 y2)])
 (defn addv [[^long x1 ^long y1] [^long x2 ^long y2]] [(+ x1 x2) (+ y1 y2)])
 (defn inside? [^long size [^long x ^long y]] (and (< -1 x size) (< -1 y size)))
 (defn outside? [^long size pos] (not (inside? size pos)))
+(defn neighbours4 [pos] [(addv pos [0 1]) (addv pos [1 0]) (addv pos [-1 0]) (addv pos [0 -1])])
+(defn neighbours-v [pos] [(addv pos [1 0]) (addv pos [-1 0])])
+(defn neighbours-h [pos] [(addv pos [0 1]) (addv pos [0 -1])])
 
 ;;
 

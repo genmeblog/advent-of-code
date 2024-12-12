@@ -6,7 +6,7 @@
 (def data (get-numbers (read-single-line "examples" 2024 11)))
 
 (t/deftest example
-  (t/is (= 55312 (second (sut/stones data 25)))))
+  (t/is (= 55312 (sut/stones data 25))))
 
 (t/deftest sut
   (t/is (= 207683 sut/part-1))
