@@ -47,13 +47,13 @@
                    (if (visited pos) buff
                        (let [[fields fences] (spread data pos)]
                          [(set/union visited fields)
-                          (conj pairs [fields (sides fences)])]))) [#{} []])
+                          (conj pairs [(count fields) (sides fences)])]))) [#{} []])
          (second))))
 
 (def data (separate (read-data 2024 12)))
 
 (defn fencing-price [data method]
-  (transduce (map (fn [[a b]] (* (count a) (method b)))) + data))
+  (transduce (map (fn [[a b]] (* a (method b)))) + data))
 
 (def part-1 (fencing-price data sum))
 ;; => 1370258
