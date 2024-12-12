@@ -23,10 +23,10 @@
   (let [[f1 f2] fence] (map vector (neighbours4 f1) (neighbours4 f2))))
 
 (defn side [fences fence]
-  (->>(filter fences (fence-neighbours fence))
-      (reduce (fn [[fs cnt] f]
-                (let [[nfs ncnt] (side (disj fs f) f)]
-                  [nfs (+ cnt ncnt)])) [fences 1])))
+  (->> (filter fences (fence-neighbours fence))
+       (reduce (fn [[fs cnt] f]
+                 (let [[nfs ncnt] (side (disj fs f) f)]
+                   [nfs (+ cnt ncnt)])) [fences 1])))
 
 (defn sides
   ([fences] (sides fences []))
