@@ -2,22 +2,15 @@
   (:require [common :refer [read-data neighbours4 sum]]
             [clojure.set :as set]))
 
-(defn positions [data]
-  (let [s (range (count data))]
-    (for [row s col s] [row col])))
-
-(defn surroundings [data pos]
-  (->> (neighbours4 pos)
-       (map (fn [p] [p (get-in data p)]))))
-
 (defn spread
   ([data pos] (spread data pos [#{pos} #{}] (get-in data pos)))
   ([data pos field+fences c]
-   (reduce (fn [[fd fs :as buff] [p c2]]
-             (cond
-               (fd p) buff
-               (= c c2) (spread data p [(conj fd p) fs] c)
-               :else [fd (conj fs [pos p])])) field+fences (surroundings data pos))))
+   (->> (neighbours4 pos)
+        (reduce (fn [[fd fs :as buff] p]
+                  (cond
+                    (fd p) buff
+                    (= c (get-in data p)) (spread data p [(conj fd p) fs] c)
+                    :else [fd (conj fs [pos p])])) field+fences))))
 
 (defn fence-neighbours [fence]
   (let [[f1 f2] fence] (map vector (neighbours4 f1) (neighbours4 f2))))
@@ -38,8 +31,9 @@
        (recur nfences (conj buff cnt))))))
 
 (defn separate [input]
-  (let [data (mapv vec input)]
-    (->> (positions data)
+  (let [data (mapv vec input)
+        s (range (count data))]
+    (->> (for [row s col s] [row col])
          (reduce (fn [[visited pairs :as buff] pos]
                    (if (visited pos) buff
                        (let [[fields fences] (spread data pos)]
