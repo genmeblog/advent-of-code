@@ -20,16 +20,15 @@
                :else [fd (conj fs [pos p])])) field+fences (surroundings data pos))))
 
 (defn fence-neighbours [fence]
-  (let [[[r1 c1] [r2 c2]] (seq fence)]
-    (if (= r1 r2)
-      (let [u (dec r1) d (inc r1)] [[[u c1] [u c2]] [[d c1] [d c2]]])
-      (let [l (dec c1) r (inc c1)] [[[r1 l] [r2 l]] [[r1 r] [r2 r]]]))))
+  (let [[f1 f2] fence] (map vector (neighbours4 f1) (neighbours4 f2))))
 
 (defn side [fences fence]
-  (let [[a b] (map fences (fence-neighbours fence))
-        [nfences sa] (if a (side (disj fences a) a) [fences 0])
-        [nfences sb] (if b (side (disj nfences b) b) [nfences 0])]
-    [nfences (+ 1 sa sb)]))
+  (let [ff (filter fences (fence-neighbours fence))]
+    (reduce (fn [[fs cnt] f]
+              (let [[nfs ncnt] (side (disj fs f) f)]
+                [nfs (+ cnt ncnt)])) [fences 1] ff)))
+
+
 
 (defn sides
   ([fences] (sides fences []))
