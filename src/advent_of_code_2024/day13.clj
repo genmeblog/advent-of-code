@@ -1,5 +1,6 @@
 (ns advent-of-code-2024.day13
-  (:require [common :refer [read-data-as-blocks get-numbers sum]]))
+  (:require [common :refer [read-data-as-blocks get-numbers sum]]
+            [fastmath.optimization :as opt]))
 
 (defn process-block [block] (mapcat get-numbers block))
 
@@ -22,3 +23,15 @@
 
 (def part-2 (prizes data true))
 ;; => 102255878088512
+
+
+;; Linear programming approach:
+;;
+;; Button A: X+94, Y+34
+;; Button B: X+22, Y+67
+;; Prize: X=8400, Y=5400
+(fastmath.optimization/linear-optimization [3 1 0] [[94 22] :eq 8400
+                                                    [34 67] :eq 5400
+                                                    [1 0] :leq 100
+                                                    [0 1] :leq 100])
+;; => [(80.0 40.00000000000001) 280.0]
