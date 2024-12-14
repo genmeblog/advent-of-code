@@ -156,7 +156,7 @@
 ;;
 
 (defn get-numbers [data]
-  (mapv parse-long (re-seq #"\d+" data)))
+  (mapv parse-long (re-seq #"[+-]?\d+" data)))
 
 (defn sum [xs] (reduce + 0 xs))
 (defn prod [xs] (reduce * 1 xs))
