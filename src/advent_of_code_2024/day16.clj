@@ -3,7 +3,6 @@
             [clojure.set :as set]))
 
 (defn starting-pos [data] [(- (count data) 2) 1 0 1])
-(defn ending-pos [data] [1 (- (count data) 2)])
 
 (defn neighbours [[x y dx dy]]
   [[[x y dy (- dx)] 1000]
