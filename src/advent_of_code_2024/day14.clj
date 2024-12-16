@@ -2,7 +2,8 @@
   (:require [common :refer [read-data get-numbers prod]]
             [clojure2d.core :as c2d]
             [clojure2d.color :as c]
-            [clojure2d.extra.utils :refer [show-image]]))
+            [clojure2d.extra.utils :refer [show-image]]
+            [fastmath.vector :as v]))
 
 (defn parse [line] (let [[a b c d] (get-numbers line)] [[a b] [c d]]))
 (def data (apply map vector (map parse (read-data 2024 14))))
