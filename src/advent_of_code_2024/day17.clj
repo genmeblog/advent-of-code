@@ -43,6 +43,14 @@
 
 (defn run-with-A [[_ program] A] (output [[A 0 0 0 []] program]))
 
+;; B = A & 7 ;; 3 bits
+;; B = B ⊕ 1 ;; 3 bits
+;; C = A >> B (lookup up to 10 bits)
+;; B = B ⊕ C
+;; A = A >> 3
+;; B = B ⊕ A
+;; out B
+;; JMP if A
 ;; 3 xors, up to 10 LSB bits generates a number
 (defn find-possible [data target ^long off in]
   (let [bitoff (long (* 3 (+ 2 off)))
