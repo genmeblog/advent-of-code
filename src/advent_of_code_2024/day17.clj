@@ -2,8 +2,6 @@
   (:require [common :refer [read-data-as-blocks get-numbers]]
             [clojure.string :as str]))
 
-(set! *unchecked-math* :warn-on-boxed)
-
 (defn parse [[registers program]]
   [(conj (vec (mapcat get-numbers registers)) 0 [])
    (get-numbers (first program))])
@@ -21,9 +19,7 @@
         0 [(bit-shift-right A (combo op A B C)) B C ip2 out]
         1 [A (bit-xor B op) C ip2 out]
         2 [A (bit-and (combo op A B C) 7) C ip2 out]
-        3 (if (zero? A)
-            [A B C ip2 out]
-            [A B C op out])
+        3 (if (zero? A) [A B C ip2 out] [A B C op out])
         4 [A (bit-xor B C) C ip2 out]
         5 [A B C ip2 (conj out (bit-and (combo op A B C) 7))]
         6 [A (bit-shift-right A (combo op A B C)) C ip2 out]
@@ -51,22 +47,25 @@
 ;; B = B ⊕ A
 ;; out B
 ;; JMP if A
-;; 3 xors, up to 10 LSB bits generates a number
-(defn find-possible [data target ^long off in]
+
+;; 3 xors, up to 10 bits generates a number
+
+(defn find-possible [data ^long target ^long off in]
   (let [bitoff (long (* 3 (+ 2 off)))
-        cnt (count target)]
-    (-> (for [^long prefix (range 16)
-              :let [l (bit-shift-left prefix bitoff)]
-              ^long in in
-              :let [n (bit-or l (bit-and in (dec (bit-shift-left 1 bitoff))))]
-              :when (= target (take cnt (run-with-A data n)))]
-          n)
-        (distinct))))
+        bitoff2 (* 3 off)        
+        mask (dec (bit-shift-left 1 bitoff))]
+    (for [^long prefix (range 16)
+          :let [l (bit-shift-left prefix bitoff)]
+          ^long in (distinct (map (fn [^long i] (bit-and i mask)) in))
+          :let [n (bit-or l in)
+                n2 (bit-shift-right n bitoff2)]
+          :when (== target (long (first (run-with-A data n2))))]
+      n)))
 
 (defn find-A [data]
   (let [target (last data)]
     (->> (reduce (fn [buff ^long id]
-                   (find-possible data (take id target) (dec id) buff)) (range 64) (range 1 17))
+                   (find-possible data (target id) id buff)) (range 64) (range 16))
          (apply min))))
 
 (def part-2 (find-A data))
