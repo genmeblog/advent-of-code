@@ -5,8 +5,10 @@
 
 (defn empty-map [size] (vec (repeat size (vec (repeat size \.)))))
 
-(defn build-map [data size steps]
-  (reduce (fn [m pos] (assoc-in m pos \#)) (empty-map size) (take steps data)))
+(defn build-map
+  ([data size] (build-map data size (count data)))
+  ([data size steps]
+   (reduce (fn [m pos] (assoc-in m pos \#)) (empty-map size) (take steps data))))
 
 (defn around [m pos] (filter #(= \. (get-in m %)) (neighbours4 pos)))
 
@@ -17,12 +19,12 @@
 (def part-1 (traverse data 70 1024))
 ;; => 292
 
-(defn find-blocking [data size cnt]
+(defn find-blocking [data size]
   (reduce (fn [m [x y :as pos]]
-            (let [nm (assoc-in m pos \#)]
+            (let [nm (assoc-in m pos \.)]
               (if (bfs->path-count (partial around nm) [0 0] [size size])
-                nm
-                (reduced (str x "," y))))) (build-map data (inc size) cnt) (drop cnt data)))
+                (reduced (str x "," y))
+                nm))) (build-map data (inc size)) (reverse data)))
 
-(def part-2 (find-blocking data 70 1024))
+(def part-2 (find-blocking data 70))
 ;; => "58,44"
