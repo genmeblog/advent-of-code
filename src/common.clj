@@ -106,13 +106,16 @@
   ((->bfs around-fn start end)))
 
 (defn bfs->path
-  [around-fn start end]
-  (->> (iterate (bfs around-fn start end) end)
-       (take-while (complement #{start}))))
+  ([around-fn start end]
+   (let [b (bfs around-fn start end)]
+     (when (b end)
+       (->> (iterate b end)
+            (take-while (complement #{start})))))))
 
 (defn bfs->path-count
   [around-fn start end]
-  (count (bfs->path around-fn start end)))
+  (when-let [p (bfs->path around-fn start end)]
+    (count p)))
 
 ;;
 

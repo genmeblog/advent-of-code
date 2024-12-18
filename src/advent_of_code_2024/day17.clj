@@ -19,7 +19,7 @@
         0 [(bit-shift-right A (combo op A B C)) B C ip2 out]
         1 [A (bit-xor B op) C ip2 out]
         2 [A (bit-and (combo op A B C) 7) C ip2 out]
-        3 (if (zero? A) [A B C ip2 out] [A B C op out])
+        3 [A B C (if (zero? A) ip2 op) out]
         4 [A (bit-xor B C) C ip2 out]
         5 [A B C ip2 (conj out (bit-and (combo op A B C) 7))]
         6 [A (bit-shift-right A (combo op A B C)) C ip2 out]
