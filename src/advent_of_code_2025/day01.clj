@@ -29,4 +29,3 @@
 (def part-2 (find-zeros data second-method))
 ;; => 7101
 
-
