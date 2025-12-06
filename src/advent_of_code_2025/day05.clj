@@ -34,4 +34,3 @@
 
 (def part-2  (all-fresh data))
 ;; => 344486348901788
-
