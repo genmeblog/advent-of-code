@@ -11,12 +11,11 @@
 (defn calculate-line-splitters
   [[nbeams cnt :as state] id]
   (if-let [routes (nbeams id)]
-    (let [updater (fnil (partial + routes) 0)]
-      [(-> nbeams
-           (dissoc id)
-           (update (inc id) updater)
-           (update (dec id) updater))
-       (inc cnt)])
+    [(-> nbeams
+         (dissoc id)
+         (update (inc id) (fnil + 0) routes)
+         (update (dec id) (fnil + 0) routes))
+     (inc cnt)]
     state))
 
 (defn calculate-line [[beams cnt] line]  (reduce calculate-line-splitters [beams cnt] line))
