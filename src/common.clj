@@ -158,6 +158,16 @@
 
 ;;
 
+(defn unique-pairs
+  [data]
+  (let [vdata (vec data)
+        cnt (count vdata)]
+    (for [^long a (range cnt)
+          ^long b (range (inc a) cnt)]
+      [(vdata a) (vdata b)])))
+
+;;
+
 (defn get-numbers [data]
   (mapv parse-long (re-seq #"[+-]?\d+" data)))
 

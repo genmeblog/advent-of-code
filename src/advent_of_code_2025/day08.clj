@@ -1,25 +1,16 @@
 (ns advent-of-code-2025.day08
-  (:require [common :refer [read-data prod]]
+  (:require [common :refer [read-data prod get-numbers unique-pairs]]
             [clojure.set :as set]))
-
-(defn parse-line [line] (->> line (re-seq #"\d+") (mapv parse-long)))
 
 (defn sq ^long [^long x] (* x x))
 (defn with-dist
   [[[^long x1 ^long y1 ^long z1 :as p1] [^long x2 ^long y2 ^long z2 :as p2]]]
   [(+ (sq (- x1 x2)) (sq (- y1 y2)) (sq (- z1 z2))) #{p1 p2}])
 
-(defn make-pairs
-  [data]
-  (for [a data b data
-        :let [cmp (compare a b)]
-        :when (not (zero? cmp))]
-    (if (neg? cmp) [a b] [b a])))
-
 (defn order-boxes
   [data]
-  (let [data (map parse-line data)]
-    {:ordered (->> (make-pairs data)
+  (let [data (map get-numbers data)]
+    {:ordered (->> (unique-pairs data)
                    (set)
                    (map with-dist)
                    (sort-by first)
