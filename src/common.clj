@@ -186,6 +186,21 @@
 
 ;;
 
+(defmacro ccw
+  [ax ay bx by cx cy]
+  `(> (* (- ~cy ~ay) (- ~bx ~ax))
+      (* (- ~by ~ay) (- ~cx ~ax))))
+
+(defn segment-intersects?
+  [[[^double ax ^double ay] [^double bx ^double by]] [[^double cx ^double cy] [^double dx ^double dy]]]
+  (and (not= (ccw ax ay cx cy dx dy)
+             (ccw bx by cx cy dx dy))
+       (not= (ccw ax ay bx by cx cy)
+             (ccw ax ay bx by dx dy))))
+
+;;
+
+
 (comment
   (do
     (add-all-data)

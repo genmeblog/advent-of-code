@@ -1,5 +1,5 @@
 (ns advent-of-code-2025.day09
-  (:require [common :refer [read-data unique-pairs get-numbers]]
+  (:require [common :refer [read-data unique-pairs get-numbers segment-intersects?]]
             [clojure2d.core :as c2d]
             [clojure2d.core.shape :as shape]
             [clojure2d.extra.utils :as utls]))
@@ -28,9 +28,33 @@
            (area pair))
          (reduce max))))
 
-(def part-2 (max-rectangle-on-rg data))
+;; slower
+(defn max-rectangle-on-rg-2
+  [data]
+  (let [path (partition 2 1 (take (inc (count data)) (cycle data)))]
+    (->> (for [[[^long x1 ^long y1] [^long x2 ^long y2] :as pair] (unique-pairs data)
+               :let [[^long x1 ^long x2] (if (< x1 x2) [x1 x2] [x2 x1])
+                     [^long y1 ^long y2] (if (< y1 y2) [y1 y2] [y2 y1])
+                     x1 (+ x1 0.1) ;; shrink a little bit
+                     x2 (- x2 0.1)
+                     y1 (+ y1 0.1)
+                     y2 (- y2 0.1)
+                     s1 [[x1 y1] [x1 y2]]
+                     s2 [[x1 y1] [x2 y1]]
+                     s3 [[x2 y2] [x2 y1]]
+                     s4 [[x2 y2] [x1 y2]]]
+               :when (every? #(not (or (segment-intersects? s1 %)
+                                       (segment-intersects? s2 %)
+                                       (segment-intersects? s3 %)
+                                       (segment-intersects? s4 %))) path)]
+           (area pair))
+         (reduce max))))
+
+(comment (max-rectangle-on-rg-2 data))
 ;; => 1560475800
 
+(def part-2 (max-rectangle-on-rg data))
+;; => 1560475800
 
 ;; vis
 
