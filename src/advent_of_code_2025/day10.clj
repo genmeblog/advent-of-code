@@ -48,9 +48,9 @@
 (defn almost-int? [^double v] (m/near-zero? (- v (m/round v))))
 
 (defn lp
-  [target constrains]
+  [target constraints]
   (try
-    (opt/linear-optimization target constrains {:non-negative? true})
+    (opt/linear-optimization target constraints {:non-negative? true})
     ;; non feasible throws an exception, set score as infinite then
     (catch Exception _ [[] ##Inf])))
 
@@ -61,7 +61,7 @@
   (let [[[id z]] (->> (map-indexed vector coeffs)
                       (filter (comp (complement almost-int?) second)))
         branch-coefficient (assoc (vec (repeat (count coeffs) 0)) id 1)
-        eqs1 (conj eqs branch-coefficient :<= (m/floor z)) ;; add two new constrains
+        eqs1 (conj eqs branch-coefficient :<= (m/floor z)) ;; add two new constraints
         eqs2 (conj eqs branch-coefficient :>= (m/ceil z)) 
         [coeffs1 solution1] (lp target eqs1)
         [coeffs2 solution2] (lp target eqs2)]
@@ -73,7 +73,7 @@
   (let [cnt (count buttons)
         target (conj (vec (repeat cnt 1)) 0) ;; minimize sum of coefficients
         eqs (vec (->> (apply map vector buttons)
-                      (mapcat (fn [j v] [v := j]) joltage))) ;; constrains
+                      (mapcat (fn [j v] [v := j]) joltage))) ;; constraints
         [coeffs solution] (lp target eqs)] ;; optimize
     (m/round (if (every? almost-int? coeffs) ;; if all coefficients are integers we got it, otherwise subdivide
                solution
