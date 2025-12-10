@@ -43,10 +43,10 @@
                      s2 [[x1 y1] [x2 y1]]
                      s3 [[x2 y2] [x2 y1]]
                      s4 [[x2 y2] [x1 y2]]]
-               :when (every? #(not (or (segment-intersects? s1 %)
-                                       (segment-intersects? s2 %)
-                                       (segment-intersects? s3 %)
-                                       (segment-intersects? s4 %))) path)]
+               :when (every? (fn [seg] (not (or (segment-intersects? s1 seg)
+                                               (segment-intersects? s2 seg)
+                                               (segment-intersects? s3 seg)
+                                               (segment-intersects? s4 seg)))) path)]
            (area pair))
          (reduce max))))
 

@@ -6,4 +6,5 @@
   :dependencies [[org.clojure/clojure "1.12.3"]
                  [clojure2d "1.5.0-alpha1"]
                  [org.clojure/data.json "2.5.1"]
+                 [org.clojure/math.combinatorics "0.3.0"]
                  [com.h2database/h2 "2.4.240"]])

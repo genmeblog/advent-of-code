@@ -197,7 +197,6 @@
              (ccw bx by cx cy dx dy))
        (not= (ccw ax ay bx by cx cy)
              (ccw ax ay bx by dx dy))))
-
 ;;
 
 
