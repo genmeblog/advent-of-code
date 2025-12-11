@@ -62,7 +62,7 @@
                       (filter (comp (complement almost-int?) second)))
         branch-coefficient (assoc (vec (repeat (count coeffs) 0)) id 1)
         eqs1 (conj eqs branch-coefficient :<= (m/floor z)) ;; add two new constraints
-        eqs2 (conj eqs branch-coefficient :>= (m/ceil z)) 
+        eqs2 (conj eqs branch-coefficient :>= (m/ceil z))
         [coeffs1 solution1] (lp target eqs1)
         [coeffs2 solution2] (lp target eqs2)]
     (min (if (every? almost-int? coeffs1) solution1 (subdivide target eqs1 coeffs1))
